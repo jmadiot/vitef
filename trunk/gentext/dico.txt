@@ -1,0 +1,454 @@
+4 humain 0 noble
+4 humain 1 noble
+4 humain 1 condamnable
+4 humain 0 fier
+4 humain 1 fière
+4 humain 1 misérable
+4 humain 0 misérable
+1 humain poisson pêche pêche pêche pêche
+1 humain animal chasse chasse chasse capture
+1 humain objet lieu lieu lieu vend
+0 poisson pêche 0 poisson
+0 humain pêche 0 pêcheur
+0 humain humain 0 breton
+0 humain humain 1 bretonne
+0 poisson pêche 1 truite
+0 poisson pêche 1 baleine
+0 poisson pêche 0 thon
+0 nourriture nourriture 1 friture
+0 poisson pêche 0 poisson-chat
+1 humain poisson pêche pêche pêche attrape
+1 poisson poisson pêche pêche pêche attrape
+1 humain poisson pêche pêche pêche prend
+1 humain animal animal lieu domestique promène
+1 humain humain lieu lieu lieu visite
+1 humain lieu lieu lieu lieu visite
+1 animal animal chasse chasse chasse visite
+1 animal animal chasse chasse chasse prend
+1 humain animal chasse humain domestique prend
+1 humain humain humain humain humain prend
+0 lieu lieu 0 musée
+0 lieu lieu 0 château
+0 lieu lieu 0 moulin
+0 lieu lieu 1 vallée
+0 lieu lieu 0 lit
+0 lieu lieu 1 salle
+0 lieu lieu 1 tente
+0 lieu lieu 1 rue
+0 lieu lieu 1 maison
+0 lieu lieu 0 trottoir
+0 lieu lieu 0 métro
+0 lieu lieu 1 campagne
+0 lieu lieu 1 mer
+0 lieu lieu 0 fleuve
+0 lieu lieu 1 plage
+0 lieu lieu 0 cinéma
+0 humain lieu 0 promeneur
+0 humain lieu 0 touriste
+0 humain lieu 1 touriste
+0 lieu lieu 1 forêt
+1 animal nourriture animal chasse nourriture broute
+1 animal animal animal chasse chasse dévore
+1 animal nourriture animal domestique nourriture dévore
+1 animal objet domestique domestique domestique casse
+1 animal objet domestique domestique lieu casse
+1 humain animal chasse chasse chasse assaute
+1 humain humain chasse lieu voyage court
+1 animal animal chasse chasse chasse court
+0 animal chasse 0 cerf
+0 animal domestique 0 boeuf
+0 animal chasse 0 loup
+0 animal chasse 0 mouton
+0 animal chasse 0 faon
+0 animal chasse 0 chevreuil
+0 animal chasse 1 laie
+0 animal chasse 1 gazelle
+0 animal domestique 1 lapine
+0 animal domestique 1 jument
+0 animal domestique 1 vache
+0 humain chasse 0 chasseur
+0 humain chasse 1 pute
+1 humain animal chasse chasse chasse chasse
+1 animal animal chasse chasse domestique chasse
+1 animal animal chasse chasse chasse chasse
+1 animal humain chasse chasse lieu attaque
+1 humain animal chasse humain animal poursuit
+0 animal domestique 0 chien
+0 animal chasse 1 souris
+0 nourriture nourriture 1 biscotte
+0 nourriture nourriture 1 tartine
+0 nourriture nourriture 1 frite
+1 humain nourriture nourriture nourriture nourriture mange
+1 humain nourriture nourriture nourriture nourriture finit
+1 animal viande nourriture chasse nourriture mord
+1 humain viande nourriture humain nourriture mord
+0 viande nourriture 0 steak
+0 viande nourriture 0 jarret
+0 viande nourriture 1 côte
+0 légume nourriture 0 potiron
+0 meuble nourriture 1 table
+0 outil nourriture 1 fourchette
+0 outil nourriture 1 cuiller
+0 outil nourriture 0 couteau
+1 humain nourriture nourriture nourriture nourriture cuisine
+4 humain 1 salope
+4 humain 0 pervers
+4 humain 1 perverse
+4 objet 1 minuscule_(CTB)
+4 objet 0 minuscule_(CTB)
+4 objet 0 énorme_(CMB)
+4 boisson 0 goûtu
+4 boisson 1 goûtue
+4 boisson 1 agréable
+4 boisson 0 agréable
+4 boisson 1 liquoreuse
+4 boisson 0 doux
+4 boisson 0 corsé
+0 humain nourriture 0 cuisinier
+0 lieu nourriture 1 cuisine
+0 nourriture nourriture 0 dessert
+0 lieu nourriture 0 restaurant
+0 objet nourriture 0 menu
+1 humain nourriture nourriture pêche nourriture avale
+1 humain liquide nourriture nourriture nourriture boit
+1 humain liquide nourriture nourriture nourriture avale
+1 humain liquide nourriture nourriture nourriture avale_cul_sec
+1 humain liquide nourriture nourriture nourriture siphonne
+1 humain liquide nourriture nourriture nourriture finit
+1 humain nourriture nourriture humain nourriture cultive
+0 véhicule voyage 0 train
+0 liquide nourriture 0 whisky
+0 liquide nourriture 0 coca
+0 liquide nourriture 1 téquila
+0 liquide nourriture 0 ti-punch
+0 liquide nourriture 1 boisson
+0 liquide nourriture 0 vin
+0 liquide nourriture 1 bouteille
+0 objet nourriture 1 bouteille
+0 liquide nourriture 0 thé
+0 liquide nourriture 0 café
+0 véhicule voyage 1 locomotive
+0 humain voyage 0 controleur
+0 objet voyage 0 billet
+0 objet voyage 0 fauteuil
+0 objet lieu 0 fauteuil
+0 véhicule voyage 0 avion
+0 humain voyage 1 hotesse
+0 instant voyage 1 pause
+1 humain véhicule voyage voyage voyage prend
+1 humain véhicule voyage voyage voyage attrape
+1 humain humain voyage humain humain suit
+1 humain véhicule voyage voyage voyage suit
+1 véhicule lieu voyage voyage lieu roule_dans
+1 humain lieu sport humain lieu court_dans
+1 humain sport sport humain sport pratique
+1 humain musique musique musique musique joue_de
+1 humain objet tennis tennis tennis frappe
+1 humain objet tennis tennis tennis lifte
+1 humain objet tennis tennis tennis coupe
+0 humain tennis 0 joueur
+0 humain tennis 1 joueuse
+0 objet tennis 1 raquette
+0 objet tennis 1 balle
+0 lieu tennis 0 court
+0 objet tennis 0 jeu
+1 objet lieu tennis tennis tennis sort
+1 humain objet tennis tennis tennis gagne
+1 humain objet science science science démontre
+1 humain objet science science science touche
+1 humain objet science science science manipule
+1 humain liquide science science science utilise
+1 humain objet science science science utilise
+1 humain objet science science science expérimente
+1 humain code science science science compile
+1 humain code science science science interprête
+1 humain objet science science science finit
+1 humain acte juge juge juge manipule
+0 code science 0 code_en_C
+0 code science 0 code_en_OcamL
+0 code science 0 code_en_python
+0 code science 0 code_en_php
+0 code science 0 code_en_perl
+0 code science 0 code_en_bash
+0 code science 0 code_en_java
+1 humain objet musique musique musique joue
+4 code 0 élégant
+4 code 0 sale
+4 code 0 très_typé
+0 humain code 0 programmateur
+4 code 0 fonctionnel
+4 code 0 impératif
+0 objet tennis 0 trophée
+0 objet tennis 1 manche
+0 objet tennis 0 jeu
+0 humain humain 0 lecteur
+0 humain humain 0 promeneur
+0 humain humain 0 serveur
+0 humain humain 1 touriste
+0 humain science 1 informaticienne
+0 humain sciencce 1 physicienne
+0 humain science 1 biologiste
+0 humain science 1 péripatéticienne
+0 lieu juge 0 prétoir
+0 humain science 1 chimiste
+0 humain humain 0 lazy
+0 humain humain 0 acquéreur
+0 animal chasse 0 aigle
+0 instant animal 0 abandon
+0 lieu voyage 0 aiguillage
+0 objet objet 0 abaque
+0 objet objet 0 acquis
+0 humain voyage 0 aiguilleur
+0 objet lieu 0 abat-jour
+0 objet animal 0 aiguillon
+0 humain science 0 TDman
+0 humain humain 1 top-modèle
+0 véhicule voyage 0 tractopelle
+3 2 Benjamin
+3 2 Aude
+3 2 Tiphaine
+3 1 Antoine
+3 1 Alexis
+3 1 Igor
+3 1 Ivan_Morel
+3 1 Roger
+3 1 Jean-Jacques
+3 2 Martine
+3 2 Paulette
+3 2 Jeanne
+3 1 Jean-Paul
+3 1 Jean-Marie
+3 1 Guillaume
+3 1 Hugo
+3 1 Lucien
+3 1 Sylvain
+3 1 PM_(DMI)
+4 liquide 1 goûtue
+4 liquide 0 gazeux
+4 objet 1 profonde_(CMBDTC)
+4 véhicule 0 rapide
+4 humain 0 rapide
+4 humain 1 moche
+4 humain 0 moche
+4 objet 0 pratique
+4 objet 1 pratique
+4 objet 0 profond
+4 animal 0 sauvage
+4 animal 1 sauvage
+4 animal 0 féroce
+4 animal 0 poilu
+4 animal 1 poilue
+4 animal 1 féroce
+4 lieu 1 paumée
+4 lieu 0 paumé
+4 lieu 0 imposant
+4 lieu 1 imposante
+1 humain animal chasse science chasse se_tape
+1 humain humain science science humain se_tape
+1 humain animal nourriture science domestique a_choppé
+1 humain animal lieu lieu domestique promène
+1 animal objet animal domestique domestique joue_à
+1 animal animal animal domestique domestique boude
+1 animal animal animal chasse domestique mord
+1 animal humain animal chasse humain mord
+0 objet animal 0 jouet
+2 0 son
+2 1 sa
+2 0 le
+2 0 un
+2 1 la
+2 1 une
+3 0 on
+3 1 il
+3 2 elle
+0 acte arme 0 aiguisage
+0 acte chasse 0 abattage
+0 instant juge 0 acquittement
+0 sport sport 0 aïkido
+0 nourriture nourriture 0 acra
+0 nourriture nourriture 0 ail
+0 instant chasse 0 abattement
+0 viande nourriture 0 aileron
+0 humain sport 0 ailier
+0 viande nourriture 0 abattis
+0 nourriture nourriture 0 ailloli
+0 lieu arme 0 abattoir
+0 objet science 0 aimant
+0 objet objet 0 actif
+0 lieu voyage 0 air
+0 humain humain 0 abbé
+0 viande nourriture 0 abdomen
+0 objet sport 0 abdominaux
+0 objet sport 0 abducteur
+0 nourriture nourriture 0 additif
+0 objet sport 0 adducteur
+0 objet objet 0 alambic
+0 lieu lieu 0 abîme
+0 objet objet 0 adhésif
+0 instant voyage 0 adieu
+0 animal chasse 0 albatros
+0 acte domestique 0 aboiement
+0 humain humain 0 adjudant
+0 objet objet 0 album
+0 humain humain 0 adjuvant
+0 nourriture nourriture 0 albumen
+0 objet objet 0 abonnement
+0 humain humain 0 admissible
+0 lieu lieu 0 abord
+0 acte arme 0 abordage
+0 acte arme 0 adoubement
+0 objet objet 0 adoucissant
+0 humain science 0 alchimiste
+0 humain humain 0 avorté
+0 liquide nourriture 0 alcool
+0 liquide science 0 alcool
+0 acte sport 0 adultère
+0 objet objet 0 alcoomètre
+0 objet objet 0 alcootest
+0 lieu domestique 0 abreuvoir
+0 lieu voyage 0 aérodrome
+0 lieu lieu 0 abri
+0 lieu voyage 0 abribus
+0 objet voyage 0 aérofrein
+0 poisson pêche 0 alevin
+0 nourriture nourriture 0 abricot
+0 véhicule voyage 0 aéroglisseur
+0 objet nourriture 0 abricotier
+0 véhicule voyage 0 aéronef
+0 véhicule voyage 0 aéroplane
+0 objet science 0 algorithme
+0 lieu voyage 0 aéroport
+0 objet juge 0 alibi
+0 objet science 0 aérosol
+0 objet science 0 aliénation
+0 objet science 0 absurde
+0 acte juge 0 abus
+0 liquide nourriture 0 aligoté
+0 lieu lieu 0 abysse
+0 nourriture nourriture 0 aliment
+0 animal chasse 0 acarien
+0 objet lieu 0 affichage
+0 objet voyage 0 accélérateur
+0 lieu lieu 0 affleurement
+0 humain voyage 0 allemand
+0 objet objet 0 accessoire
+0 acte juge 0 accident
+0 acte juge 0 affront
+0 humain sport 0 accidenté
+0 acte arme 0 affrontement
+0 objet science 0 alliage
+0 acte chasse 0 affût
+0 animal chasse 0 alligator
+0 objet objet 0 allume-cigare
+0 objet juge 0 accord
+0 humain voyage 0 afrikaans
+0 objet nourriture 0 allume-gaz
+0 objet musique 0 accordéon
+0 humain humain 0 allumeur
+0 humain musique 0 accordeur
+0 sentiment sentiment 0 agacement
+0 objet science 0 almanach
+0 acte sentiment 0 accostage
+0 acte sport 0 accouchement
+0 objet objet 0 alpaga
+0 objet objet 0 accoudoir
+0 lieu domestique 0 alpage
+0 acte humain 0 accouplement
+0 acte chasse 0 accouplement
+0 objet vêtement 0 accoutrement
+0 objet objet 0 agenda
+0 humain arme 0 agent
+0 sport sport 0 alpinisme
+0 lieu lieu 0 alsace
+0 humain voyage 0 alsacien
+0 humain humain 0 alter-ego
+0 objet science 0 alternateur
+0 objet science 0 accumulateur
+0 objet science 0 altimètre
+0 animal domestique 0 agneau
+0 lieu voyage 0 altiport
+0 objet tennis 0 ace
+0 objet musique 0 alto
+0 objet science 0 acétate
+0 animal domestique 0 agnelet
+0 humain science 0 agnostique
+0 objet science 0 aluminium
+0 objet objet 0 achat
+0 lieu lieu 0 alvéole
+0 humain science 0 agrégatif
+0 liquide science 0 acide
+0 objet science 0 acier
+0 humain arme 0 agresseur
+0 objet nourriture 0 amandier
+0 humain humain 0 acolyte
+0 humain sentiment 0 amant
+0 objet juge 0 acompte
+0 nourriture nourriture 0 agrume
+0 animal chasse 0 aï
+0 objet science 0 aide-mémoire
+0 humain humain 0 aïeul
+0 humain musique 0 amateur
+0 humain science 0 anthropoïde
+0 objet sport 0 après-ski
+0 objet science 0 ambre
+0 objet science 0 antibactérien
+0 objet juge 0 amendement
+0 objet science 0 antibiotique
+0 objet science 0 anticalcaire
+0 véhicule voyage 0 aquaplane
+0 objet science 0 anticancéreux
+0 humain voyage 0 américain
+0 lieu pêche 0 aquarium
+0 lieu lieu 0 aqueduc
+0 objet science 0 amiante
+0 objet science 0 antidépresseur
+0 humain voyage 0 arabe
+0 nourriture nourriture 0 amidon
+0 nourriture nourriture 0 antidote
+0 liquide nourriture 0 arabica
+0 animal chasse 0 arachnide
+0 liquide science 0 ammoniac
+0 humain science 0 antihéros
+0 humain humain 0 arbalétrier
+0 objet objet 0 amoncellement
+0 humain humain 0 antimilitarisme
+0 humain sport 0 arbitre
+0 objet véhicule 0 amortisseur
+0 objet science 0 ampère
+0 objet science 0 antioxydant
+0 arme arme 0 arc
+0 objet science 0 ampèremètre
+0 lieu science 0 amphi
+0 animal domestique 0 amphibien
+0 objet sport 0 arceau
+0 humain humain 0 antisémite
+0 animal chasse 0 archange
+0 animal chasse 0 archéoptéryx
+0 objet musique 0 archet
+0 animal domestique 0 archevêque
+0 lieu voyage 0 archipel
+0 lieu lieu 0 antre
+0 animal domestique 0 archiprêtre
+0 lieu voyage 0 anus
+0 animal chasse 0 anaconda
+0 instant voyage 0 août
+0 nourriture nourriture 0 ananas
+0 humain humain 0 anarchiste
+0 objet objet 0 argent
+0 humain humain 0 argentier
+0 humain humain 0 ancêtre
+0 poisson pêche 0 anchois
+0 nourriture nourriture 0 anchois
+0 humain voyage 0 apatride
+0 liquide nourriture 0 apéritif
+0 nourriture nourriture 0 aphrodisiaque
+0 humain humain 0 androïde
+0 animal domestique 0 âne
+0 liquide nourriture 0 armagnac
+0 humain voyage 0 armateur
+0 nourriture nourriture 0 aneth
+0 humain voyage 0 arménien
+0 humain humain 0 ange
+0 humain humain 0 apôtre
+0 humain humain 0 anglais
+-1
