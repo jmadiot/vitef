@@ -1,0 +1,13 @@
+WTF IS THAT
+  avoid cubes with your mouse
+
+DEPENDENCIES
+  basically just libsfml-dev:
+  # apt-get install libsfml-dev
+
+COMPILING
+  $ make
+
+PLAYING
+  $ ./vroum
+
