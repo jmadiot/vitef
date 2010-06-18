@@ -283,7 +283,9 @@ int main()
         
         float w = App.GetWidth();
         float angle = -((float)MouseX / ((float)w) - 0.5)*2.*ship_max_angle;
-        
+				/* joystick */
+        angle += -(Input.GetJoystickAxis(0, sf::Joy::AxisX) / (20))*2.*ship_max_angle;
+                
         ship_angle += (angle-ship_angle) * ship_strength * dt;
         
         ship.z += ship_speed*dt*cos(ship_angle);
@@ -296,6 +298,8 @@ int main()
         if(Input.IsKeyDown(sf::Key::Right)) x+=incr;
         if(Input.IsKeyDown(sf::Key::W))     z-=incr;
         if(Input.IsKeyDown(sf::Key::X))     z+=incr;*/
+
+        
         
         gluLookAt(ship.x,ship.y+40.,ship.z-40.,  ship.x+sin(0*ship_angle)*100.,ship.y+1,ship.z+cos(0*ship_angle)*100., -sin(ship_angle/2),cos(ship_angle/2),0); 
         
