@@ -9,3 +9,5 @@ fill.ml:parse dico.txt
 spam:main.ml fill.ml
 	ocaml str.cma main.ml
 
+clean:
+	rm -f parse fill.ml
