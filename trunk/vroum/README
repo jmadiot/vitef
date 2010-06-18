@@ -1,5 +1,6 @@
 WTF IS THAT
-  avoid cubes with your mouse
+  avoid cubes with your mouse or with a joystick, like the 
+  laptop itself if it's compatible enough.
 
 DEPENDENCIES
   basically just libsfml-dev:
