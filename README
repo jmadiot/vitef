@@ -1,6 +1,8 @@
 Liste des "projets":
 
 gentext : Un programme de génération de phrases à peu près sensées
+lifegame : Un jeu de la vie asynchrone
 sirtet : Un truc à la con de JM
+tictactoe5 : Puissance 5 (aligner 5 cases de sa couleur)
 vroum : Evite les cubes avec ton vaisseau spatial (et ta souris) !
 xjumps : Un xjump-like en javascript
