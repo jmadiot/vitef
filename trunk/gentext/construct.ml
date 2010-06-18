@@ -10,8 +10,8 @@ let rec rand_champ = fun () -> let n = Random.int nbre_chp in
 ;;
 
 let test t chp espece = match t with
-    | V v -> v.chp_v = chp
-    | M m -> match m.sorte with
+	| V v -> v.chp_v = chp
+	| M m -> match m.sorte with
 		| Nom      -> m.espece = espece && (Random.int 5 = 0 || m.chp_lex = chp)
 		| Adjectif -> m.espece = espece
 		| _        -> true

@@ -1,23 +1,10 @@
-type sorte = Adjectif | Article | Nom | Pronom
+type mot = string
 ;;
 
-type vocable = {
-	sorte   : sorte;
-	mot     : string;
-	espece  : int;
-	chp_lex : int;
-};;
-
-type verbe = {
-	verbe    : string;
-	esp_suj  : int;
-	esp_cibl : int;
-	chp_suj  : int;
-	chp_cibl : int;
-	chp_v    : int;
-};;
-
-type mot = V of verbe | M of vocable;;
+type dico =
+	| Leaf of mot list
+	| Node of dico list
+;;
 
 type groupe_nominal = {
 	article   : mot;
