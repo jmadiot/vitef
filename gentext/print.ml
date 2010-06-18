@@ -1,3 +1,4 @@
+#use "types.ml";;
 #use "char.ml";;
 
 let voyelles = ['a';'e';'i';'o';'u';'y';'h';"é".[0];"è".[0]];;
@@ -9,12 +10,17 @@ let is_voyelle x =
     in aux voyelles
 ;;
 
-let rec rec_print flag = function
+let rec_print ls =
+    let rec aux flag = function
     | []       -> ()
     | (V _)::q -> failwith "Ouais on y croit !"
-    | [M t]      -> if flag then print_string(" et "^(t.mot)) else print_string (" "^t.mot)
-    | (M t)::q     -> ((if flag then print_string(", "^(t.mot)) else print_string (" "^t.mot));
-	            rec_print true q)
+    | [M t]    -> if flag then print_string(" et "^(t.mot)) else print_string (" "^t.mot)
+    | (M t)::q ->
+		begin
+		(if flag then print_string(", "^(t.mot)) else print_string (" "^t.mot));
+	        rec_print_aux true q
+		end
+    in aux false ls
 ;;
 
 let print_sujet flag = function
@@ -24,12 +30,12 @@ let print_sujet flag = function
                 	       then
 				   (
 				   if flag 
-			           then (print_string ("L'"^(n.mot)); rec_print false lst)
-                  	           else (print_string ("l'"^(n.mot)); rec_print false lst)
+			           then (print_string ("L'"^(n.mot)); rec_print lst)
+                  	           else (print_string ("l'"^(n.mot)); rec_print lst)
                   	           )
 			       else let a = String.copy art.mot in
                       	           (if flag then  a.[0] <- Char.uppercase a.[0]);
-                		   print_string (a^" "^(n.mot)); rec_print false lst
+                		   print_string (a^" "^(n.mot)); rec_print lst
 	| _ -> failwith "Oué c'est ça oué !")
     | _ -> failwith "Oué c'est ça oué !"
 ;;
