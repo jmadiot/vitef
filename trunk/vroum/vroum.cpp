@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <SFML/Window.hpp>
 #include <math.h>
 #include <vector>
