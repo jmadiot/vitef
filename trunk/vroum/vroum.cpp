@@ -300,12 +300,8 @@ int main()
 				/* joystick */
 				// coefficient /20 is already in [-x, x] where x is reasonably equal to 20
         angle += -(Input.GetJoystickAxis(0, sf::Joy::AxisX) / (20))*2.*ship_max_angle;
-<<<<<<< .mine
 
-=======
-        
         // try to integrate angle in a non-completely-unrational way
->>>>>>> .r15
         ship_angle += (angle-ship_angle) * ship_strength * dt;
 	ship_speed += dt / 3;
 
