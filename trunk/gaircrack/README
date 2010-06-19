@@ -1,0 +1,12 @@
+Small graphical interface to crack a WEP/WPA key.
+This critically depends on the aircrack suite and must me run as root.
+
+Dependencies: aircrack-ng
+
+Usage: sudo sh main.sh
+
+
+TODO: 
+	add support of aireplay-ng
+	support of WPA: add a (good !) dictionnary
+	 

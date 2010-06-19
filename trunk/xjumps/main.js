@@ -70,7 +70,8 @@ function keydown(e)
 function keyup(e)
 {
 	var touche = (window.Event) ? e.which : e.keyCode;
-	switch(touche){
+	switch(touche)
+	{
 		case 37: left_pressed = false; break//left
 		case 38: up_pressed = false; break//up
 		case 39: right_pressed = false; break//right	
@@ -172,8 +173,8 @@ function changespeed()
 		}
 		else
 		{
-			if(speedx >= 0 && dis == 0) speedx = Math.max(0, speedx - 2);
-			if(speedx < 0 && dist == 0) speedx=Math.min(0, speedx + 2);
+			if(speedx >= 0 && dis == 0) speedx = Math.max(0, speedx - 5);
+			if(speedx < 0 && dist == 0) speedx=Math.min(0, speedx + 5);
 			posx += speedx;
 		}
 	}
