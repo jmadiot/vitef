@@ -1,10 +1,12 @@
-#load "graphics.cma";;
-Random.self_init;;
+(* #load "graphics.cma" interpreter *)
+open Graphics
 
-type transition = DIE | BORN | STAY;;
+let () = Random.self_init ()
+
+type transition = DIE | BORN | STAY
 
 let mysleep n =
-  for i = 0 to n do () done;;
+  for i = 0 to n do () done
 
 let transition2 grid i j g_m g_n =
  let rec aux_i accu = function
@@ -18,7 +20,7 @@ let transition2 grid i j g_m g_n =
  in
   let compteur = aux_i 0 1 in
  if compteur <= 4 then BORN
- else DIE;;
+ else DIE
 
 let transition grid i j g_m g_n =
  let rec aux_i accu = function
@@ -33,7 +35,7 @@ let transition grid i j g_m g_n =
   let compteur = aux_i 0 1 in
  if compteur == 3 then BORN
  else if compteur == 2 then STAY
- else DIE;;
+ else DIE
 
 let update grid proba =
  let m = Array.length grid in
@@ -50,7 +52,7 @@ let update grid proba =
    else new_grid.(i).(j) <- grid.(i).(j)
   done;
  done;
-new_grid;;
+new_grid
 
 let console_print grid =
  let m = Array.length grid - 1 in
@@ -62,7 +64,7 @@ let console_print grid =
    | _ -> print_string "X";
   done;
   print_string "\n";
- done;;
+ done
 
 let print = let i = ref (-1) in
  function grid ->
@@ -73,6 +75,7 @@ begin
  let n = Array.length (grid.(0)) in
  begin
   Graphics.open_graph "";
+  let () = auto_synchronize false in
   Graphics.resize_window (2*n+2) (2*m+2);
   Graphics.set_window_title "Jeu de la vie";
   Graphics.set_color Graphics.red;
@@ -93,10 +96,11 @@ begin
      image.(2*i).(2*j+1) <- color;
      image.(2*i+1).(2*j+1) <- color;
     done;
-  done;  Graphics.draw_image (Graphics.make_image image) 1 1;
+  done;
+  Graphics.draw_image (Graphics.make_image image) 1 1;
  end
  else ()
-end;;
+end
 
 let create m n p =
  let new_grid = Array.make m [||] in
@@ -107,13 +111,13 @@ let create m n p =
     then new_grid.(i).(j) <- 1;
   done;
  done;
-new_grid;;
+new_grid
 
 let test proba =
  let rec itere grid = function
-  | 0 -> let new_grid = update grid proba in print new_grid; while true do () done;
-  | n -> let new_grid = update grid proba in print new_grid; itere new_grid (n-1)
+  | 0 -> let new_grid = update grid proba in print new_grid; let () = synchronize () in let _ = wait_next_event [] in ();
+  | n -> let new_grid = update grid proba in print new_grid; let () = synchronize () in itere new_grid (n-1)
  in
- itere (create 300 500 10) 1000;;
+ itere (create 300 500 10) 1000
 
-test 20;;
+let () = test 20
