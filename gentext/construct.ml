@@ -1,14 +1,29 @@
 #use "fill.ml";;
 #use "print.ml";;
 
+(** À certains moments, il faudra faire des choix
+aléatoires. On regardera bien entendu le nombre de fils
+non vides **)
+
 Random.self_init();;
 
 let rec rand_champ = fun () -> let n = Random.int nbre_chp in
     match borne_verbes.(n) with
 	| 0 -> rand_champ ()
 	| _ -> n
-;;
 
+let proper_length xs =
+    let rec aux accu = fun
+	| []                -> accu
+	| (_ []) :: q       -> proper_length accu q
+	| (_ (_ :: _)) :: q -> proper_length (accu + 1) q
+    in aux 0 xs
+
+(**
+TODO: From here
+**)
+
+(*
 let test t chp espece = match t with
 	| V v -> v.chp_v = chp
 	| M m -> match m.sorte with
@@ -16,6 +31,7 @@ let test t chp espece = match t with
 		| Adjectif -> m.espece = espece
 		| _        -> true
 ;;
+*)
 
 let select lst chp esp nbre =
     let rec aux flag ls nb accu = match flag,nb,ls with

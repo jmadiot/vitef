@@ -114,6 +114,6 @@ let test proba =
   | 0 -> let new_grid = update grid proba in print new_grid; while true do () done;
   | n -> let new_grid = update grid proba in print new_grid; itere new_grid (n-1)
  in
- itere (create 150 300 5) 1000;;
+ itere (create 300 500 10) 1000;;
 
 test 20;;
