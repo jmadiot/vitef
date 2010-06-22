@@ -1,0 +1,14 @@
+#labels Phase-Requirements,suggestions,feature,requests
+Suggestions of projects that could be included in vitef.
+
+== Conventional shit ==
+
+  * display shit in 3D with svg + javascript
+  * implement "world of sand" with the canvas tag of html5
+
+== More logical shit ==
+
+  * type inference of shit in color
+  * hol<>coq<>isabelle<>mizar<>... converters (or why is this shit stupid?)
+  * prove type inference algorithm of coq in hol light or anything.
+  * presburger with a exhibition of a counter-example in case of failure
