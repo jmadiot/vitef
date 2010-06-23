@@ -6,6 +6,11 @@ type dico =
 	| Node of dico list
 ;;
 
+type choice =
+	| Int of int
+	| Rand
+;;
+
 type groupe_nominal = {
 	article   : mot;
 	adjectifs : mot list;
