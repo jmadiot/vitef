@@ -5,33 +5,49 @@
 aléatoires. On regardera bien entendu le nombre de fils
 non vides **)
 
-Random.self_init();;
+let () = Random.self_init()
 
-let rec rand_champ = fun () -> let n = Random.int nbre_chp in
-    match borne_verbes.(n) with
-	| 0 -> rand_champ ()
-	| _ -> n
+(* proper_* : fonctions ne tenant pas compte des
+branches vides *)
 
 let proper_length xs =
     let rec aux accu = fun
-	| []                -> accu
-	| (_ []) :: q       -> proper_length accu q
-	| (_ (_ :: _)) :: q -> proper_length (accu + 1) q
+	| []          -> accu
+	| (_ []) :: q -> proper_length accu q
+	| _ :: q      -> proper_length (accu + 1) q
     in aux 0 xs
+
+let rec proper_lookup n xs = match n , xs with
+	| _ , []          -> []
+	| n , (_ []) :: q -> proper_lookup n q
+	| 0 , (_ ys) :: _ -> ys
+	| n , _ :: q      -> proper_lookup (n - 1) q
+
+(* Prendre un fils non vide au hasard *)
+
+let rand_list xs =
+	proper_lookup (Random.int (proper_length xs)) xs
+
+(* Selectionner un élément en suivant un chemin totalement
+ou partiellement défini : type choice = | Rand | Int of int *)
+
+let select_path tree path = match path , tree with
+	| []           , Leaf ts -> random_list ts
+	| []           , Node ts -> select_path (random_list ts) []
+	| [ Rand ]     , Leaf ts -> random_list ts
+	| [ Int n ]    , Leaf ts -> lookup n ts
+	| Rand :: q    , Node ts -> select_path (random_list ts) q
+	| (Int n) :: q , Node ts -> select_path (lookup n ts) q
+	| _            , _       -> "Error : select_path default"
+
 
 (**
 TODO: From here
+- random selection of a verb (fixed parameters)
+- random selection of other kind of words (depending on the
+	parameters chosen for the verb)
 **)
 
-(*
-let test t chp espece = match t with
-	| V v -> v.chp_v = chp
-	| M m -> match m.sorte with
-		| Nom      -> m.espece = espece && (Random.int 5 = 0 || m.chp_lex = chp)
-		| Adjectif -> m.espece = espece
-		| _        -> true
-;;
-*)
 
 let select lst chp esp nbre =
     let rec aux flag ls nb accu = match flag,nb,ls with
