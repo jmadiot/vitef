@@ -8,66 +8,80 @@ let is_voyelle x =
 	| [] -> false
 	| t::q -> x = t || aux q
     in aux voyelles
-;;
 
 let rec_print ls =
     let rec aux flag = function
-    | []       -> ()
-    | (V _)::q -> failwith "Ouais on y croit !"
-    | [M t]    -> if flag then print_string(" et "^(t.mot)) else print_string (" "^t.mot)
-    | (M t)::q ->
+    | []     -> ()
+    | [ t ]  -> if flag then print_string(" et "^t) else print_string (" "^t)
+    | t :: q ->
 		begin
-		(if flag then print_string(", "^(t.mot)) else print_string (" "^t.mot));
-	        rec_print_aux true q
+		(if flag then print_string(", "^t) else print_string (" "^t));
+		aux true q
 		end
     in aux false ls
-;;
+
 
 let print_sujet flag = function
-    | Pr (M pronom) -> pronom.mot.[0] <- Char.uppercase pronom.mot.[0]; print_string (pronom.mot)
-    | G_n gn        -> (match gn.article, gn.nom, gn.adjectifs with
-	| M art, M n, lst -> if is_voyelle ((n.mot).[0])
-                	       then
-				   (
-				   if flag 
-			           then (print_string ("L'"^(n.mot)); rec_print lst)
-                  	           else (print_string ("l'"^(n.mot)); rec_print lst)
-                  	           )
-			       else let a = String.copy art.mot in
-                      	           (if flag then  a.[0] <- Char.uppercase a.[0]);
-                		   print_string (a^" "^(n.mot)); rec_print lst
-	| _ -> failwith "Oué c'est ça oué !")
-    | _ -> failwith "Oué c'est ça oué !"
-;;
+(* Le sujet est soit un pronom *)
+	| Pr (pronom) ->
+		begin
+			let () = pronom.[0] <- Char.uppercase pronom.[0]
+			in  print_string (pronom)
+		end
+(* soit un groupe nominal *)
+	| G_n gn       ->
+		begin match gn.article, gn.nom, gn.adjectifs with
+		       	| art, n, lst ->
+				begin
+					if is_voyelle (n.[0])
+					then 	(if flag
+                                   		then (print_string ("L'"^n); rec_print lst)
+		                                else (print_string ("l'"^n); rec_print lst))
+					else let a = String.copy art in
+						(if flag then  a.[0] <- Char.uppercase a.[0]);
+                                   	print_string (a^" "^n); rec_print lst
+				end
+		end
 
 let print_proposition b = function
-    | subj, V v, gn ->
+	| subj, v, gn ->
 		print_sujet b subj;
-		print_string (" "^(v.verbe)^" ");
+		print_string (" "^v^" ");
 		print_sujet false (G_n gn);
-    | _ -> failwith "Oué c'est ça oué !"
-;;
 
 let print_relative = function
-    | subj, V v, gn ->
+	| subj,  v, gn ->
 		print_string v.verbe;
 		print_string " ";
 		print_sujet false (G_n gn);
-    | _ -> failwith "On y croit !"
-;;
 
 let rec print_texte text =
-    let rec aux_print b flag = function
-	| []   -> ()
-	| t::q -> (match t with
-    		| Prop p       -> print_proposition b p
-     	    	| Conj []      -> ()
-    	   	| Conj [t]     -> print_string " et "; aux_print b false [t]
-    	    	| Conj (t::q)  -> (if not flag then print_string ", "); aux_print b false [t];
-				aux_print false false [Conj q]
-    	    	| Relat (ph,p) -> aux_print flag b [ph]; print_string " qui "; print_relative p
-	  ); aux_print false true q
-in match text with
-    | [] -> ()
-    | t::q -> aux_print true true [t] ; print_string ". " ; print_texte q
-;;
+	let rec aux_print b flag = function
+		| []   -> ()
+		| t::q ->
+			(begin
+			match t with
+		    		| Prop p       -> print_proposition b p
+     	    			| Conj []      -> ()
+		    	   	| Conj [t]     -> print_string " et "; aux_print b false [t]
+    	    			| Conj (t::q)  ->
+					begin
+					let () = if not flag then print_string ", " in
+					let () = aux_print b false [t]              in
+					aux_print false false [Conj q]
+					end
+				| Relat (ph , p) ->
+					begin
+					let () = aux_print flag b [ph] in
+					let () = print_string " qui "  in
+					print_relative p
+					end
+		  	end ; aux_print false true q)
+	in match text with
+		| [] -> ()
+		| t::q ->
+			begin
+			let () = aux_print true true [t] in
+			let () =  print_string ". "      in
+			print_texte q
+			end
