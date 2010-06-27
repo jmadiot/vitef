@@ -118,6 +118,6 @@ let test proba =
   | 0 -> let new_grid = update grid proba in print new_grid; let () = synchronize () in let _ = wait_next_event [] in ();
   | n -> let new_grid = update grid proba in print new_grid; let () = synchronize () in itere new_grid (n-1)
  in
- itere (create 300 500 10) 1000
+ itere (create 350 600 5) 1000
 
-let () = test 20
+let () = test 10

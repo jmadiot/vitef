@@ -1,3 +1,3 @@
 #use "construct.ml";;
 
-construct_page 5;;
+construct_proposition 0;;
