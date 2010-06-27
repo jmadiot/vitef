@@ -191,7 +191,7 @@ class rgbvect {
 
 std::vector <rgbvect> cubes;
 
-// add a obstacle given the position of the ship
+// add an obstacle given the position of the ship
 void add(float x, float z) {
     float envergure=1000.;
     float nx=x+random(envergure)-envergure/2.; //position : not so far in any direction. if you go left enough, you may live forever
