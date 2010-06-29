@@ -3,6 +3,7 @@ Suggestions of projects that could be included in vitef.
 
 == Conventional shit ==
 
+  * A physical-laws sensitive drawing tool in javascript (like this java on e http://sodaplay.com/creators/soda/items/moovl)
   * display shit in 3D with svg + javascript
   * implement "world of sand" with the canvas tag of html5
   * mod xjump _a la_ hugo (i.e. with fake platforms) (proceeding)
