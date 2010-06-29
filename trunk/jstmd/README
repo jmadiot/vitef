@@ -1,0 +1,16 @@
+outil en javascript pour :
+  pour l'instant :
+    * dessiner des graphes
+
+  forthcoming features : 
+    * dessiner de vraies machines de Turing
+    * les simuler
+    * les enregistrer au format .dot
+    * ouvrir des fichiers .dot
+
+
+TODO : 
+  * gérer les flèches avec quadraticCurve
+  * ajouter des labels sur les liens et les noeuds
+	 
+
