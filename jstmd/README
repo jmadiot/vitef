@@ -1,16 +1,5 @@
-outil en javascript pour :
-  pour l'instant :
-    * dessiner des graphes
+usage: you_favorite_web_brower_supporting_svg+javascript main.svg
 
-  forthcoming features : 
-    * dessiner de vraies machines de Turing
-    * les simuler
-    * les enregistrer au format .dot
-    * ouvrir des fichiers .dot
+description: allows to draw graphs (without multiple edges) and export them to .dot format
 
-
-TODO : 
-  * gérer les flèches avec quadraticCurve
-  * ajouter des labels sur les liens et les noeuds
-	 
-
+forthcoming: adding labels to edges to describe Turing Machines and simulate them.
