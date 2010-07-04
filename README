@@ -1,10 +1,16 @@
 Liste des "projets":
 
+gaircrack : Une interface graphique (en gtkdialog, oui, oui) pour la suite aircrack
+
 gentext : Un programme de génération de phrases à peu près sensées
+
+jstmd : JavaScript Turing Machine Drawer
 
 lifegame : Un jeu de la vie asynchrone
 
 sirtet : Un truc à la con de JM
+
+stereo : defonce-toi les yeux pour voir des bidules en 3D
 
 tictactoe5 : Puissance 5 (aligner 5 cases de sa couleur)
 
@@ -12,6 +18,3 @@ vroum : Evite les cubes avec ton vaisseau spatial (et ta souris) !
 
 xjumps : Un xjump-like en javascript
 
-gaircrack : Une interface graphique (en gtkdialog, oui, oui) pour la suite aircrack
-
-jstmd : JavaScript Turing Machine Drawer
