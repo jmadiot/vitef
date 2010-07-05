@@ -14,13 +14,15 @@
 		var drawing_area;
 		
 		var nb_states=0; // number of CREATED states
-		var states = new Array(100);
+		//var states = new Array(100);
 		var selected = false;
 		var selected_state = 0;
 		var suppr; //is maj key pressed ?
 		var mousedown = false;
 		var moving_state;
 		var drawing_edge = false;
+		var initial_pressed = false;
+		var final_pressed = false;
 		
 	function init(evt)
 	{
@@ -39,7 +41,9 @@
 		switch(evt.keyCode)
 		{
 			case 83 : suppr = true; break;
-			case 69 : drawing_edge = true;
+			case 69 : drawing_edge = true; break;
+			case 70 : final_pressed = true; break; 
+			case 73 : initial_pressed = true; break;
 		}
 	}
 	
@@ -47,9 +51,11 @@
 	{
 		switch(evt.keyCode)
 		{
-			case 83 : suppr = false; break;
+			case 68 : dot_graph(); break;
 			case 69 : drawing_edge = false; break;
-			case 68 : dot_graph();
+			case 70 : final_pressed = false; break;
+			case 73 : initial_pressed = false; break;
+			case 83 : suppr = false; break;
 		}
 	}
 		
@@ -57,6 +63,18 @@
 	{
 		var group= document.getElementById("state" + moving_state);
 		mousedown = true;
+	}
+	
+	function switch_initial(n)
+	{
+		var element = $("state"+n).childNodes[2];
+		element.setAttribute("opacity", (1 - 1* element.getAttribute("opacity")));
+	}
+	
+	function switch_final(n)
+	{
+		var element = $("state"+n).childNodes[0];
+		element.setAttribute("opacity", (1 - 1* element.getAttribute("opacity")));
 	}
 	
 	function draw_state(e)
@@ -69,11 +87,11 @@
 		group.setAttribute("id", "state"+ current);
 		group.setAttribute("onmousemove", "move(evt);");
 		group.setAttribute("onmouseup", "mousedown=false");
+		group.setAttribute("onmousedown", "moving_state=" + current + '; init_move(evt);' );
+		group.setAttribute("onclick", "select(" + current + ");");
 		
 		var ellipse = svgdoc.createElementNS(svgns,"ellipse");
 		ellipse.setAttributeNS(svgns,"id", "state_"+nb_states); 			
-		ellipse.setAttribute("onclick", "select(" + current + "); remove(" + current + ");");
-		ellipse.setAttribute("onmousedown", "moving_state=" + current + '; init_move(evt);' );
 		ellipse.setAttribute("cx", x); 
 		ellipse.setAttribute("cy", y); 
 		ellipse.setAttribute("rx", 35); 
@@ -82,25 +100,49 @@
 		ellipse.setAttribute("stroke", "black");
 		ellipse.setAttribute("stroke-width", "1.5");
 		
-		var  border = svgdoc.createElementNS(svgns,"ellipse");
-		border.setAttributeNS(svgns,"id", "border_state_"+nb_states); 
-		border.setAttribute("cx", x);
-		border.setAttribute("cy", y);
-		border.setAttribute("rx" , "35");//
-		border.setAttribute("ry" , "30");//
-		border.setAttribute("opacity" , "0");		
+		var  initial = svgdoc.createElementNS(svgns,"ellipse");
+		initial.setAttribute("cx", x);
+		initial.setAttribute("cy", y);
+		initial.setAttribute("rx" , "32");
+		initial.setAttribute("ry" , "27");
+		initial.setAttribute("style", "fill:none;");		
+		initial.setAttribute("stroke", "black");
+		initial.setAttribute("stroke-width" , "1.5");
+		initial.setAttribute("opacity", "0");
+		
+		var accepting = svgdoc.createElementNS(svgns,"g");
+		var line0 = svgdoc.createElementNS(svgns,"line");
+		var line1 = svgdoc.createElementNS(svgns,"line");
+		var line2 = svgdoc.createElementNS(svgns,"line");
+		line0.setAttribute("x1", x);
+		line0.setAttribute("y1", y);
+		line0.setAttribute("x2", x + 50);
+		line0.setAttribute("y2", y + 50);
+		line1.setAttribute("x1", x + 50);
+		line1.setAttribute("y1", y + 50 );
+		line1.setAttribute("x2", x + 50);
+		line1.setAttribute("y2", y + 43);
+		line2.setAttribute("x1", x+ 50);
+		line2.setAttribute("y1", y+ 50);
+		line2.setAttribute("x2", x + 43);
+		line2.setAttribute("y2", y + 50);
+		accepting.appendChild(line0);
+		accepting.appendChild(line1);
+		accepting.appendChild(line2);
+		accepting.setAttribute("stroke", "black");
+		accepting.setAttribute("stroke-width", "1.5");
+		accepting.setAttribute("opacity", "0");
 		
 		// label
 		var newlabel = svgdoc.createElementNS(svgns, "text");
 		newlabel.setAttribute("x", x-5*(Math.floor(Math.max(1, 1 + Math.log(nb_states)/(Math.log(10)))))); //text-align
 		newlabel.setAttribute("y", y+5);
 		var newtext = svgdoc.createTextNode(nb_states);
-		newlabel.setAttribute("onclick", "select(" + current + ");remove(" + current + ");");
 		newlabel.appendChild(newtext);
-		newlabel.setAttribute("onmousedown", "moving_state=" + current + '; init_move(evt);' );
 		
-		group.appendChild(border);
+		group.appendChild(accepting);
 		group.appendChild(ellipse);
+		group.appendChild(initial);
 		group.appendChild(newlabel);
 		drawing_area.appendChild(group);
 		
@@ -109,25 +151,7 @@
 	}
 	
 	function $(id){return document.getElementById(id);}
-	
-	// removes a state
-	function remove(nb)
-	{
-		if(suppr)
-		{
-			drawing_area.removeChild(svgdoc.getElementById("state" + nb));
-			//remove the corresponding edges
-			for(var i = 0; i < nb_states; i++)
-			{
-				var edge = svgdoc.getElementById("edge" + i + "-" + nb);
-				if(edge) drawing_area.removeChild(edge);
-				edge = svgdoc.getElementById("edge" + nb + "-" + i);
-				if(edge) drawing_area.removeChild(edge);
-			}
-			selected = false;
-			mousedown = false;
-		}
-	}
+
 	
 	// str.replace(/[^0-9]*/,"").replace(/-[0-9]*/,"") * 1;
 	// str.replace(/[^-]*-/,"") * 1;
@@ -148,11 +172,33 @@
 		}
 		else
 		{
-			deselect();
-			var state = document.getElementById("state" + nb).childNodes[1];
-			state.setAttribute("stroke", "red");
-			selected_state = nb;
-			selected= true;
+			if(initial_pressed) switch_initial(nb);
+			else
+			{
+				if(final_pressed) switch_final(nb);
+				else
+				{
+					deselect();
+					var state = $("state" + nb).childNodes[1];
+					state.setAttribute("stroke", "red");
+					selected_state = nb;
+					selected= true;
+				}
+			}
+		}
+		if(suppr) // removes a node
+		{
+			drawing_area.removeChild(svgdoc.getElementById("state" + nb));
+			//remove the corresponding edges
+			for(var i = 0; i < nb_states; i++)
+			{
+				var edge = svgdoc.getElementById("edge" + i + "-" + nb);
+				if(edge) drawing_area.removeChild(edge);
+				edge = svgdoc.getElementById("edge" + nb + "-" + i);
+				if(edge) drawing_area.removeChild(edge);
+			}
+			selected = false;
+			mousedown = false;
 		}
 	}
 	
@@ -255,8 +301,6 @@
 				border.setAttribute("ry", 30);
 				border.setAttribute("style", "fill:none;stroke-width:10;opacity:0");
 				
-				
-				
 				var newline1 = svgdoc.createElementNS(svgns, "line");
 				var newline2 = svgdoc.createElementNS(svgns, "line");
 				newline1.setAttribute("x1", x);
@@ -280,9 +324,6 @@
 				group.appendChild(border);
 				drawing_area.appendChild(group);
 				drawing_area.appendChild(document.getElementById("state" + i));
-			
-			
-			
 			}
 		}
   }
@@ -294,16 +335,33 @@
 			deselect();
 			var x = evt.clientX;
 			var y = evt.clientY;
-			var group= document.getElementById("state" + moving_state);
-			var border = group.childNodes[0];
+			var group = document.getElementById("state" + moving_state);
+			var line0 = group.childNodes[0].childNodes[0];
+			var line1 = group.childNodes[0].childNodes[1];
+			var line2 = group.childNodes[0].childNodes[2];
 			var state = group.childNodes[1];
-			var label = group.childNodes[2];
-			border.setAttribute("cx", x);
+			var initial = group.childNodes[2];
+			var label = group.childNodes[3];
+			initial.setAttribute("cx", x);
 			state.setAttribute("cx", x);
 			label.setAttribute("x", x - 5*(Math.floor(Math.max(1, 1 + Math.log(nb_states)/(Math.log(10))))));
-			border.setAttribute("cy", y);
+			initial.setAttribute("cy", y);
 			state.setAttribute("cy", y);
 			label.setAttribute("y", y + 5);
+							
+			line0.setAttribute("x1", x);
+			line0.setAttribute("y1", y);
+			line0.setAttribute("x2", x + 50);
+			line0.setAttribute("y2", y + 50);
+			line1.setAttribute("x1", x + 50);
+			line1.setAttribute("y1", y + 50 );
+			line1.setAttribute("x2", x + 50);
+			line1.setAttribute("y2", y + 43);
+			line2.setAttribute("x1", x+ 50);
+			line2.setAttribute("y1", y+ 50);
+			line2.setAttribute("x2", x + 43);
+			line2.setAttribute("y2", y + 50);
+			
 			redraw_edges();
 		}
   }
@@ -327,11 +385,16 @@
  
  function dot_graph()
  {
+ 
 	var str = "digraph generated_graph{\n\tnode [shape=circle] "; 
 	var element;
 	for(var i = 0; i < nb_states; i++)
 	{
-		if($("state" + i)) str += i + " ";
+		element = $("state" + i);
+		if(element)
+		{
+			str += i + " ";
+		}
 	}
 	str += ";\n";
 	for(var i = 0; i < nb_states; i++)
@@ -346,20 +409,18 @@
 	alert(str);	
  }
  
- 
    ]]></script>
 <g id="drawing_area">
 	<rect id="P" x="0" y="0" width="100%" height="100%" fill="#ffe" onclick="manage_evt(evt);" onmouseup='mousedown=false;' onmousemove="move(evt);"/>
 
-<text id="key_e" x ="20" y="15">e: draw an edge.</text>
-<text id="key_s" x ="20" y="30">s: suppression of a node/edge.</text>
-<text id="key_d" x ="20" y="45">d: give the graph in its .dot format.</text>
+<text id="key_d" x ="20" y="15">d: give the graph in its .dot format.</text>
+<text id="key_e" x ="20" y="30">e: draw an edge.</text>
+<text id="key_f" x ="20" y="45">f: final state</text>
+<text id="key_i" x ="20" y="60">i: initial state</text>
+<text id="key_s" x ="20" y="75">s: suppression of a node/edge.</text>
+
 
 <text id="debug" x= "20" y="100"> </text>
 </g>
 
 </svg>
-
-
-
-
