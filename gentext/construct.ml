@@ -71,10 +71,10 @@ pour avoir des textes cohérents (chp lexial par exemple) *)
 let construct_adjlist genre esp = ["pipo"]
 
 let construct_gn esp chp =
-	let genre 	= Random.int 2 											in
-	let article	= select_path (!articles) [ Int genre ]					in
+	let genre 	= Random.int 2 						in
+	let article	= select_path (!articles) [ Int genre ]			in
 	let nom		= select_path (!noms) [ Int genre ; Int esp ; Int chp ]	in
-	let adjlist = construct_adjlist genre esp							in
+	let adjlist = construct_adjlist genre esp				in
 	G_n {
 		article 	= article;
 		adjectifs 	= adjlist;
@@ -91,18 +91,18 @@ let construct_sujet esp chp = match Random.int 2 with
 		construct_gn esp chp
 
 let construct_proposition chp_lex =
-		let tmp			= elim_node (!verbes)								in
-		let esp_sujet 	= proper_index (Random.int (proper_length tmp))	tmp	in
-		let tmp			= elim_node (lookup esp_sujet tmp)					in
-		let esp_cible	= proper_index (Random.int (proper_length tmp))	tmp	in
-		let tmp			= elim_node (lookup esp_cible tmp)					in
-		let chp_sujet	= proper_index (Random.int (proper_length tmp)) tmp	in
-		let tmp         = elim_node (lookup chp_sujet tmp)                 	in
-		let chp_cible	= proper_index (Random.int (proper_length tmp)) tmp	in
-		let tmp			= elim_node (lookup chp_cible tmp)					in
+		let tmp			= elim_node (!verbes)					in
+		let esp_sujet 		= proper_index (Random.int (proper_length tmp))	tmp	in
+		let tmp			= elim_node (lookup esp_sujet tmp)			in
+		let esp_cible		= proper_index (Random.int (proper_length tmp))	tmp	in
+		let tmp			= elim_node (lookup esp_cible tmp)			in
+		let chp_sujet		= proper_index (Random.int (proper_length tmp)) tmp	in
+		let tmp         	= elim_node (lookup chp_sujet tmp)                 	in
+		let chp_cible		= proper_index (Random.int (proper_length tmp)) tmp	in
+		let tmp			= elim_node (lookup chp_cible tmp)			in
 		let verbe		= rand_list (elim_leaf (lookup chp_lex tmp))		in
-		let sujet		= construct_sujet esp_sujet chp_sujet				in
-		let cible		= construct_gn esp_cible chp_cible					in
+		let sujet		= construct_sujet esp_sujet chp_sujet			in
+		let cible		= construct_gn esp_cible chp_cible			in
 		sujet , verbe , cible
 
 (*TODO: From here*)
