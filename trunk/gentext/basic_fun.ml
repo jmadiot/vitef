@@ -22,14 +22,22 @@ let rec lookup n xs = match n with
 
 let rec insert_tree path value tree = match path , tree with
 	| []     , Leaf xs -> Leaf (value :: xs)
-	| n :: q , Node xs -> Node (insert_list n q value xs)
+	| [ n ]  , Node xs -> Node (insert_list_leaf n value xs)
+	| n :: q , Node xs -> Node (insert_list_node n q value xs)
 	| _      , _       -> Leaf []
 
-and insert_list index path value xs = match index , xs with
+and insert_list_leaf index value xs = match index , xs with
+	| 0 , []              -> [Leaf [value]]
+	| 0 , (Leaf x) :: xs' -> (Leaf (value :: x)) :: xs'
+	| 0 , (Node _) :: _   -> []
+	| n , []              -> (Leaf []) :: (insert_list_leaf (n - 1) value [])
+	| n , x :: xs'        -> x :: (insert_list_leaf (n - 1) value xs')
+
+and insert_list_node index path value xs = match index , xs with
 	| 0 , []      -> [insert_tree path value (Node [])]
-	| 0 , x :: xs -> (insert_tree path value x) :: xs
-	| n , []      -> (Node []) :: (insert_list (n - 1) path value [])
-	| n , x :: xs -> x :: (insert_list (n - 1) path value xs)
+	| 0 , x :: xs' -> (insert_tree path value x) :: xs'
+	| n , []      -> (Node []) :: (insert_list_node (n - 1) path value [])
+	| n , x :: xs' -> x :: (insert_list_node (n - 1) path value xs')
 
 (** Spécifications : chaque arbre (profondeur, nombre de fils
 à chaque "étage", etc.) et les fonctions inserent donc les
@@ -54,3 +62,15 @@ let add_article article genre =
 let add_pronom pronom genre =
     let pronom   = nettoyer pronom in
     	pronoms := insert_tree [genre] pronom (!pronoms)
+
+let rec print_list str = function
+	| []     -> ()
+	| t :: q -> print_newline (); print_string (str^t^" :: "); print_list str q
+
+let rec print_dicolist str = function
+	| [] 	  -> ()
+	| t :: ts -> print_newline (); print_dico str t; print_dicolist str ts
+
+and print_dico str = function
+	| Node ts -> print_string str ; print_string "Node"; print_dicolist ("-"^str) ts
+	| Leaf ts -> print_string str ; print_string "Leaf"; print_list ("-"^str) ts

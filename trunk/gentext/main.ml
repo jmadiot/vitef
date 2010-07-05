@@ -1,3 +1,4 @@
 #use "construct.ml";;
+#use "print.ml";;
 
-construct_proposition 0;;
+print_proposition true (construct_proposition 0);;
