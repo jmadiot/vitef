@@ -1,7 +1,5 @@
-type mot = string
-
 type dico =
-	| Leaf of mot list
+	| Leaf of string list
 	| Node of dico list
 
 type choice =
@@ -9,14 +7,14 @@ type choice =
 	| Rand
 
 type groupe_nominal = {
-	article   : mot;
-	adjectifs : mot list;
-	nom		  : mot;
+	article   : string;
+	adjectifs : string list;
+	nom	  : string;
 }
 
-type sujet = Pr of mot | G_n of groupe_nominal
+type sujet = Pr of string | G_n of groupe_nominal
 
-type proposition = sujet * mot * groupe_nominal
+type proposition = sujet * string * groupe_nominal
 
 type phrase =
 	| Prop 	of proposition

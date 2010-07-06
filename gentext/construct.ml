@@ -75,20 +75,18 @@ let construct_gn esp chp =
 	let article	= select_path (!articles) [ Int genre ]			in
 	let nom		= select_path (!noms) [ Int genre ; Int esp ; Int chp ]	in
 	let adjlist = construct_adjlist genre esp				in
-	G_n {
+	{
 		article 	= article;
 		adjectifs 	= adjlist;
-		nom			= nom;
-		}
+		nom		= nom;
+	}
 
 let construct_sujet esp chp = match Random.int 2 with
-	| 0 ->
-		begin
+	| 0 ->	begin
 		let genre = Random.int 3 in
 		Pr (select_path (!pronoms) [Int genre])
 		end
-    | _ ->
-		construct_gn esp chp
+	| _ ->  G_n (construct_gn esp chp)
 
 let construct_proposition chp_lex =
 		let tmp			= elim_node (!verbes)					in
