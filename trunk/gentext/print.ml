@@ -54,7 +54,7 @@ let print_proposition b = function
 
 let print_relative = function
   | subj,  v, gn ->
-    print_string v.verbe;
+    print_string v;
     print_string " ";
     print_sujet false (G_n gn)
 
