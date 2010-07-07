@@ -1,5 +1,5 @@
-#use "types.ml";;
-#use "char.ml";;
+open Types
+open Char
 
 let voyelles = ['a';'e';'i';'o';'u';'y';'h';"é".[0];"è".[0]];;
 

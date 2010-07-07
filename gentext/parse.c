@@ -174,7 +174,7 @@ int lecture() {
 
 int main() {
     initialize();
-    printf("#use \"basic_fun.ml\";;\n");
+    printf("open Basic_fun\nlet () = ");
     if (lecture() != 0)
     {
 	int i = 0;

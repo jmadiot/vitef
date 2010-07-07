@@ -1,4 +1,6 @@
-#use "fill.ml";;
+open Fill
+open Types
+open Basic_fun
 
 (** À certains moments, il faudra faire des choix
 aléatoires. On regardera bien entendu le nombre de fils

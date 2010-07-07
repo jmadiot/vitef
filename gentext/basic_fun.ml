@@ -1,4 +1,4 @@
-#use "types.ml";;
+open Types
 
 (* Nos dictionnaires : plus ou moins des arbres de décision *)
 
