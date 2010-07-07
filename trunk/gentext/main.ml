@@ -1,4 +1,6 @@
-#use "construct.ml";;
-#use "print.ml";;
+open Types
+open Print
 
-print_proposition true (construct_proposition 0);;
+let _ =
+  let (a, b, c) = Construct.construct_proposition 0 in
+  print_proposition true (a, b, c)
