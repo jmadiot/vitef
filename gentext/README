@@ -1,31 +1,43 @@
-HOWTO :
+COMPILATION :
 
-- compiler le parser : `gcc -Wall parse.c -o parse`
-- créer le fichier de remplissage du dico ml : `./parse < dico.txt > fill.ml
-- créer du spam : `ocaml str.cma main.ml`
+  Pour tout compiler :
+    $ make
+
+  Pour compiler le parser seulement :
+    $ make parse
+
+  Pour créer le fichier de remplissage du dico ml seulement :
+    $ make fill.ml
+
+EXECUTION :
+
+    $ ./main
+  ou
+    $ make spam
 
 BASHRC :
 
-- Une fonction à mettre dans votre bashrc (avec des adresses absolues si vous voulez qu'elle marche depuis n'importe où)
-- Pour le code du site web (pourrir est down), demandez à JM
+  - Une fonction à mettre dans votre bashrc (avec des adresses absolues si vous voulez qu'elle marche depuis n'importe où)
+  - Pour le code du site web (pourrir est down), demandez à JM
 
-spam () {
-addr=`ocaml str.cma addresse.ml`
-contenu=`ocaml str.cma main.ml`
-subject=`ocaml str.cma subject.ml`
-wget "http://pourrir.freevar.com/spam.php?from=$addr&subject=$subject&message=$contenu&respo=on" -O out
-}
+  spam () {
+  addr=`ocaml str.cma addresse.ml`
+  contenu=`ocaml str.cma main.ml`
+  subject=`ocaml str.cma subject.ml`
+  wget "http://pourrir.freevar.com/spam.php?from=$addr&subject=$subject&message=$contenu&respo=on" -O out
+  }
 
 BOURRINAGE :
 
-- taper dans la console : `while [ : ]; do spam; done
-- n'hésitez pas à faire ctrl + C à un moment (sinon ça continue à l'infini)
+  - taper dans la console : `while [ : ]; do spam; done
+  - n'hésitez pas à faire ctrl + C à un moment (sinon ça continue à l'infini)
 
 DICTIONNAIRE :
 
-- je ne me souviens plus de la convention mais vous pouvez mater le code source de parser.c, c'est pas mal détaillé je crois
+  - je ne me souviens plus de la convention mais vous pouvez mater le code source de parser.c, c'est pas mal détaillé je crois
 
 TODO :
-- print_texte.ml (améliorer)
-- suppression des adjectifs en doublon
-- ajout des structures de phrases distinctes (cf. types.ml)
+  - print_texte.ml (améliorer)
+  - suppression des adjectifs en doublon
+  - ajout des structures de phrases distinctes (cf. types.ml)
+
