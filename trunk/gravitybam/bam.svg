@@ -1,0 +1,642 @@
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' 
+onload="jmstart(evt)" 
+height="100%" width="100%"
+>
+
+<script><![CDATA[
+  var svgdoc = null;
+  var started = false;
+  var count = 0;
+  var pi = 4 * Math.atan(1);
+  
+  
+  /** keyboard handling **/
+  
+  var kpressed = new Array();
+  for(i=0;i<300;++i)
+    kpressed[i]=false;
+  
+  function keydown(e) {
+    kpressed[e.keyCode]=true;
+    debug(1, e.keyCode+" down");
+    upkey();
+  }
+  
+  function keyup(e) {
+    kpressed[e.keyCode]=false;
+    debug(1, e.keyCode+" up");
+    upkey();
+    if(e.keyCode == 77)
+      cheatmode = !cheatmode;
+  }
+  
+  function upkey() {
+    str="";
+    for(i=0;i<300;++i)
+      if(kpressed[i])
+        str+=" "+i;
+    debug(1,str);
+  }
+  
+  
+  /** SVG specifics **/
+	var svgns = 'http://www.w3.org/2000/svg';
+  var place = null;
+  
+  
+  /** Practical functions **/
+  
+  // shortcuts
+  function $(id) {return document.getElementById(id);}
+  function reg(x,def) { return (x===undefined)?def:x; }
+  function debug(n,str) {$('wit'+n).firstChild.nodeValue=str;}
+  
+  // to a SVG element, set several attributes given in an array
+  SVGElement.prototype.set = function(v) {
+    for(i=0; i<v.length/2; i++) {
+      this.setAttribute(v[2*i], v[2*i+1]);
+    }
+  }
+  
+  // With a line object, set its position with two vectors
+  SVGLineElement.prototype.confline = function(a, b) {
+    this.set([
+      "x1", a.x,
+      "y1", a.y,
+      "x2", b.x,
+      "y2", b.y,
+      "stroke", "white",
+      "stroke-width", "1"
+    ]);
+  }
+  
+  
+  /****************************/
+  /******** 2-D Vector ********/
+  /****************************/
+  
+  function Vector(ax, ay) {
+    this.x = reg(ax,0);
+    this.y = reg(ay,0);
+    this.add = function(a) {
+      this.x += a.x;
+      this.y += a.y;
+    }
+    this.addmul = function(a, k) {
+      this.x += a.x * k;
+      this.y += a.y * k;
+    }
+    this.mul = function(a) {
+      this.x *= a;
+      this.y *= a;
+    }
+    this.norm2 = function() {
+      return this.x*this.x + this.y*this.y;
+    }
+    this.norm = function() {
+      return Math.sqrt(this.x*this.x + this.y*this.y);
+    }
+  }
+  
+  function straight(angle, norm) {
+    norm = reg(norm, 1);
+    return new Vector(norm * Math.cos(angle), norm * Math.sin(angle));
+  }
+  
+  function left(angle, norme) {
+    return straight(angle + pi/2, norme);
+  }
+  
+  function right(angle, norme) {
+    return straight(angle - pi/2, norme);
+  }
+  
+  function back(angle, norme) {
+    return straight(angle + pi, norme);
+  }
+  
+  function vadd(a, b) {
+    return new Vector(a.x+b.x, a.y+b.y);
+  }
+  
+  function vaddmul(a, b, k) {
+    return new Vector(a.x+b.x*k, a.y+b.y*k);
+  }
+  
+  function vsub(a, b) {
+    return new Vector(a.x-b.x, a.y-b.y);
+  }
+  
+  
+  /****************************/
+  /******** Class Ship ********/
+  /****************************/
+  
+  var nships = 0;
+  
+  function Ship(ax, ay, aa) {
+    
+    // position, angle, size
+    this.pos = new Vector(reg(ax,1), reg(ay,0));
+    this.a = reg(aa, 0);
+    this.size = 10;
+    this.r = 10;
+    this.active = false;
+    
+    // creates svg objects composing the ship
+    this.group = null;
+    this.base = null;
+    this.lbase = null;
+    this.rbase = null;
+    this.power = 100;
+    this.create_obj = function() {
+      this.group = svgdoc.createElementNS(svgns, "g");
+      this.base  = svgdoc.createElementNS(svgns, "line");
+      this.lbase = svgdoc.createElementNS(svgns, "line");
+      this.rbase = svgdoc.createElementNS(svgns, "line");
+      this.mire  = svgdoc.createElementNS(svgns, "line");
+      this.group.set(["id", "ship"+nships]); nships++;
+      place.appendChild(this.group);
+      this.group.appendChild(this.base);
+      this.group.appendChild(this.lbase);
+      this.group.appendChild(this.rbase);
+      this.group.appendChild(this.mire);
+    }
+    
+    // return the position of the nose of the ship
+    this.gunpos = function() {
+      return vadd(this.pos, straight(this.a, this.size));
+    }
+    
+    // update the position of the ship on the screen
+    this.move = function() {
+      a=this.a;
+      gun = this.gunpos();
+      c = this.size;
+      base = vadd(this.pos, back(a, this.size));
+      l    = vadd(base, left (a, this.size));
+      r    = vadd(base, right(a, this.size));
+      pmire= vadd(gun, straight(a, this.power));
+      this.base.confline(l, r);
+      this.lbase.confline(l, gun);
+      this.rbase.confline(r, gun);
+      this.mire.confline(gun, pmire);
+      this.mire.set(["opacity", this.active*1]);
+    }
+    
+    this.create_obj();
+    this.move();
+  }
+  
+  
+  var activeship = -1;
+  function activate_ship(n) {
+    if(activeship>=0) {
+      ships[activeship].active = false;
+      ships[activeship].mire.set(["opacity", 0]);
+    }
+    activeship = n;
+    ships[activeship].active = true;
+    ships[activeship].mire.set(["opacity", 1]);
+  }
+  
+  
+  /****************************/
+  /******* Class Planet *******/
+  /****************************/
+  
+  nplanets=0;
+  
+  function Planet(ax, ay, ar, aw) {
+    
+    // position, radius, weight
+    this.pos = new Vector(reg(ax,100), reg(ay,100));
+    this.r = reg(ar, 100);
+    this.w = reg(aw, 1);
+    this.color = "#f00";
+    this.obj;
+    
+    // creates svg objects
+    this.create_obj = function() {
+      this.obj = svgdoc.createElementNS(svgns, "circle");
+      this.obj.set([
+        "cx", this.pos.x,
+        "cy", this.pos.y,
+        "r", this.r,
+        "id", "planet"+nplanets,
+        "opacity", 1,
+        "fill", this.color
+      ]);
+      nplanets++;
+      place.appendChild(this.obj);
+    }
+    
+    this.create_obj();
+  }
+  
+  
+  /****************************/
+  /******* Class Bullet *******/
+  /****************************/
+  
+  function Bullet(ax, ay, ar) {
+    // bullet: svg object, position, speed, radius
+    this.obj = null;
+    this.pos = new Vector(reg(ax,0), reg(ay,0));
+    this.v = new Vector(0,0);
+    this.r = reg(ar, 2);
+    this.active = false;    // is the bullet moving
+    this.bangedout = false; // has the bullet left the ship?
+    
+    // creates svg objects
+    this.create_obj = function() {
+      this.obj = svgdoc.createElementNS(svgns, "circle");
+      place.appendChild(this.obj);
+    }
+    
+    this.create_obj();
+    
+    this.move = function() {
+      this.obj.set([
+        "cx", this.pos.x,
+        "cy", this.pos.y,
+        "r", this.r,
+        "fill", "yellow"
+      ]);
+    }
+    
+    // start the shoooot
+    this.shoot = function(pos, v) {
+      this.pos = pos;
+      this.v = v;
+      this.active = true;
+      this.bangedout = false;
+      this.move()
+    }
+    
+    // update the position & al
+    this.update = function() {
+      dt = 0.01;
+      if(this.active) {
+        f = new Vector(0, 0);
+        f.x=0;
+        f.y=0;
+        if(!this.bangedout) {
+          if(
+            vsub(this.pos, ships[activeship].pos).norm2() > 
+            10*Math.pow(ships[activeship].size, 2)
+          )
+            this.bangedout = true;
+        }
+        
+        ouched = false;
+        for(var ip = 0; ip < planets.length; ip++) {
+          dpos = vsub(planets[ip].pos, this.pos);
+          d2 = dpos.norm2();
+          if(d2 < planets[ip].r * planets[ip].r) {
+            ouched = true;
+          }
+          dpos.mul(1/d2 * G * planets[ip].w);
+          f.add(dpos);
+        }
+        f.mul(1000);
+        this.v.addmul(f, dt);
+        npos = vaddmul(this.pos, this.v, dt);
+        this.pos = npos;
+        for(is=0; is<ships.length; ++is) {
+          dpos = vsub(this.pos, ships[is].pos);
+          d2 = dpos.norm2();
+          if(d2 < ships[is].size * ships[is].size * 4 && this.bangedout) {
+            ouched = true;
+            debug(3, "Et BAM!");
+            destruction(is);
+          }
+        }
+        this.obj.set([
+          "cx", this.pos.x,
+          "cy", this.pos.y,
+          "opacity", 1
+        ]);
+        if(ouched) {
+          this.active = false;
+          activate_ship(1 - activeship);
+        }
+      } else {
+        this.obj.set(["opacity", 0]);
+      }
+    }
+  }
+    
+  /****************************/
+  /****** END OF CLASSES ******/
+  /****************************/
+  
+  // global 
+  var planets = new Array();
+  var ships = new Array();
+  var G = 100;
+  
+  // bullet: svg object, position, speed
+  var Bbullet = null;
+  var Bbulletpos = new Vector();
+  var Bbulletv = new Vector();
+  
+  // main bullet
+  var bullet = null;
+  
+  // cheat mode: simulate the curve all the way
+  var curve = null;
+  var nlines = 300;
+  var lines = new Array();
+  var wlines = new Array();
+  var cheatmode = false;
+  
+  
+  
+  /************************************************/
+  /**************** INIT FUNCTIONS ****************/
+  /************************************************/
+  
+  function randompos() {
+    return new Vector(Math.random() * screen_w, Math.random() * screen_h);
+  }
+  
+  function touch(a, b, marge) {
+    return vsub(a.pos, b.pos).norm() < a.r + b.r + reg(marge, 0);
+  }
+  
+  function remove(e) {
+    e.parentElement.removeChild(e);
+  }
+  
+  // initialize planets
+  function init_planets() {
+    for(var i=0; i<planets.length; ++i) {
+      remove(planets[i].obj);
+    }
+    planets = [];
+    var p = new Object();
+    var ok = true;
+    for(ip=0; ip<5; ip++) {
+      do {
+        p.pos = randompos();
+        p.r = Math.random()*60+50;
+        ok = true;
+        for(i=0; i<planets.length && ok; ++i) {
+          if(touch(p, planets[i], 50))
+            ok=false;
+        }
+        for(i=0; i<ships.length && ok; ++i) {
+          if(touch(p, ships[i], 20))
+            ok=false;
+        }
+      } while (!ok)
+      planets.push(new Planet(p.pos.x, p.pos.y, p.r, 1));
+    }
+    //planets.push(new Planet(100, 100, 20, 1));
+    //planets.push(new Planet(300, 100, 50, 1));
+    //planets.push(new Planet(400, 300, 20, 1));
+  }
+  
+  // screen
+  screen_w = 600;
+  screen_h = 400;
+  
+  // initialize ships
+  function init_ships(n) {
+    for(var i=0; i<ships.length; ++i) {
+      remove(ships[i].group);
+    }
+    if(n==2 && false) {
+      // TODO special case
+    } else {
+      for(var i=0; i<n; i++) {
+        r = screen_h * 0.4;
+        cx = screen_w / 2;
+        cy = screen_h / 2;
+        ii = i + (Math.random() - 0.5)/2;
+        rr = r * (0.9 + Math.random() * 0.2);
+        ships[i] = new Ship(
+          cx + rr * Math.cos( ii / n * 2 * pi ),
+          cy + rr * Math.sin( ii / n * 2 * pi ),
+          i / n * 2 * pi + pi 
+        );
+      }
+    }
+  }
+  
+  // initialize game
+  nplayers = 2;
+  nturn = 0;
+  var score = new Array();
+  for(var i = 0; i<nplayers; i++)
+    score[i]=0;
+  
+  function init_game() {
+    init_ships(nplayers);
+    init_planets();
+    activate_ship(nturn%nplayers);
+    nturn++;
+  }
+  
+  function destruction(n) {
+    if(n == activeship) {
+      alert("MOUAHAHA!");
+      score[n] -= 200;
+    } else {
+      score[activeship] += 100;
+    }
+    init_game();
+  }
+  
+  function jmstart(evt) {
+    
+    // SVG specifics & stuff
+    svgdoc = evt.target.ownerDocument;
+    svgdoc.onkeydown=keydown;
+    svgdoc.onkeyup=keyup;
+    setInterval(update, 10);
+    
+    // Venez dans la place !
+    place=$("place");
+    
+    // Building cheat mode's linges
+    curve = svgdoc.createElementNS(svgns, "g");
+    place.appendChild(curve);
+    for(i=0; i<nlines; i++) {
+      lines.push(svgdoc.createElementNS(svgns, "line"));
+      curve.appendChild(lines[i]);
+    }
+    
+    // This little thing that turns and annoys hugo
+    for(i=0; i<4; i++) {
+      wlines.push(svgdoc.createElementNS(svgns, "line"));
+      place.appendChild(wlines[i]);
+    }
+    
+    // Build the bullet
+    bullet = new Bullet();
+    
+    // initialize the GAME
+    init_game();
+    
+  }
+  
+  
+  
+  /************************************************/
+  /*************** UPDATE FUNCTIONS ***************/
+  /************************************************/
+  
+  //var banged = false;  // is the Bbullet moving?
+  //var bangout = false; // has the Bbullet left its own ship?
+  
+  function update() {
+    // what time is it?
+    count++;
+    debug(0,Math.floor(count / 1000 * 40));
+    
+    // modifications of the active ship
+    ship = ships[activeship];
+    dpower =  (kpressed[38] ? 1 : kpressed[40] ? -1 : 0) * 1;
+    dangle = -(kpressed[37] ? 1 : kpressed[39] ? -1 : 0) * 0.01;
+    ship.a += dangle;
+    ship.power += dpower;
+    if(ship.power < 10) ship.power = 10;
+    ship.move();
+    
+    // has the player shot?
+    bang = kpressed[32] || kpressed[13];
+    if(!bullet.active && bang) {
+      bullet.shoot(ship.gunpos(), straight(ship.a, ship.power));
+      debug(3,"");
+    }
+    
+    // cheat mode: simulate in advance
+    if(cheatmode) {
+      curve.set(["opacity", 1]);
+      
+      // initial position
+      pos=ship.gunpos();
+      v=straight(ship.a, ship.power);
+      dt = 0.01;
+      
+      // ouch = has the beam touched anything?
+      ouch = false;
+      f = new Vector(0, 0);
+      
+      // interaction between the Bbullet and the planets
+      var i;
+      for(i = 0; i < nlines && !ouch; i++) {
+        f.x=0;
+        f.y=0;
+        
+        // computing the attraction between the planets and the ship
+        for(var ip = 0; ip < planets.length; ip++) {
+          dpos = vsub(planets[ip].pos, pos);
+          d2 = dpos.norm2();
+          ouch = ouch || d2 < planets[ip].r * planets[ip].r; // touch a planet
+          dpos.mul(1/d2 * G * planets[ip].w);
+          f.add(dpos);
+        }
+        f.mul(1000);
+        v.addmul(f, dt);
+        npos = vaddmul(pos, v, dt);
+        lines[i].confline(pos,npos);
+        op = 0.5;
+        if(ouch) op = 0.1;
+        lines[i].set(["opacity", op]);
+        pos = npos;
+      };
+      // be sure to clean the remaining of the path
+      if(ouch) {
+        while(i<nlines) {
+          lines[i].set(["opacity", 0]);
+          i++;
+        }
+      }
+    } else {
+      curve.set(["opacity", 0]);
+    }
+    
+    // update position of the Bbullet
+    bullet.update();
+    
+    // thing that turns.
+    work();
+  }
+  
+  /*function updateBbullet() {
+    dt = 0.01;
+    if(banged) {
+      f = new Vector(0, 0);
+      f.x=0;
+      f.y=0;
+      debug(1, vsub(Bbulletpos, ships[activeship].pos).norm2());
+      if(vsub(Bbulletpos, ships[activeship].pos).norm2() > 10*Math.pow(ships[activeship].size, 2)) {
+        bangout = true;
+      }
+      ouched = false;
+      for(var ip = 0; ip < planets.length; ip++) {
+        dpos = vsub(planets[ip].pos, Bbulletpos);
+        d2 = dpos.norm2();
+        if(d2 < planets[ip].r * planets[ip].r) {
+          ouched = true;
+          alert("Raté !");
+        }
+        dpos.mul(1/d2 * G * planets[ip].w);
+        f.add(dpos);
+      }
+      f.mul(10);
+      Bbulletv.add(f);
+      npos = vaddmul(Bbulletpos, Bbulletv, dt);
+      Bbulletpos = npos;
+      for(is=0; is<ships.length; ++is) {
+        dpos = vsub(Bbulletpos, ships[is].pos);
+        d2 = dpos.norm2();
+        if(d2 < ships[is].size * ships[is].size * 4 && bangout) {
+          banged=false;
+          debug(3,"Et BAM!");
+        }
+      }
+      Bbullet.set([
+        "cx", Bbulletpos.x,
+        "cy", Bbulletpos.y 
+      ]);
+      Bbullet.set(["opacity", 1]);
+      if(ouched) {
+        banged = false;
+        activate_ship(1-activeship);
+      }
+    } else {
+      Bbullet.set(["opacity", 0]);
+    }
+  }*/
+  
+  wangle = 0;
+  function work() {
+    wangle += 0.01;
+    c = new Vector(40, 250);
+    r = 20;
+    n = wlines.length;
+    wlines[0].confline(c, vadd(c, straight(wangle, r)));
+    wlines[1].confline(c, vadd(c, left(wangle, r)));
+    wlines[2].confline(c, vadd(c, right(wangle, r)));
+    wlines[3].confline(c, vadd(c, back(wangle, r)));
+  }
+  
+]]>
+</script>
+<g id="place">
+  <rect id="P" x="0" y="0" width="100%" height="100%" fill="#000" />
+</g>
+<g id="debug">
+  <text id="wit0" x="5" y="15" width="50" height="20" fill="#008" > </text>
+  <text id="wit1" x="5" y="35" width="50" height="20" fill="#008" > </text>
+  <text id="wit2" x="5" y="55" width="50" height="20" fill="#008" > </text>
+  <text id="wit3" x="5" y="75" width="50" height="20" fill="#008" > </text>
+</g>
+</svg>
+
+
+

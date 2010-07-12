@@ -18,8 +18,46 @@ let pattern (x : int) (y : int) : color =
   let fx, fy = fx -. 0.5, fy -. 0.5 in
   huu (0.5 +. 0.5 *. cos (30. *. norm fx fy))
 
+let pattern (x : int) (y : int) : color =
+  let w = 10 in
+  if x mod w = 0 then
+    let x = x / w in
+    let r, g, b = x mod 2, (x mod 4)/2, (x mod 8)/4 in
+    let f x = 255 * x in
+    rgb (f r) (f g) (f b)
+  else
+    white
+
+let arcenciel t =
+	let t = abs_float t in
+	let rgbf r g b =
+	  let f t = truncate (t *. 255.) in
+		rgb (f r) (f g) (f b)
+	in
+	let interpol x = 0.5 -. 0.5 *. cos(x *. 3.1415926536) in
+	let t = t -. floor t in
+	let n = 7 in
+	let nn = float n in
+	let i = truncate (t *. nn) in
+	let x = nn*.(t -. (float i) /. nn) in
+	let x = interpol x in  (* supprimer pour voir l'utilité d'interpol *)
+	let y = 1. -. x in
+	match i with
+		| 0 -> rgbf x  0. 0.
+		| 1 -> rgbf 1. x  0.
+		| 2 -> rgbf y  1. 0.
+		| 3 -> rgbf 0. 1. x
+		| 4 -> rgbf 0. y  1.
+		| 5 -> rgbf x  0. 1.
+		| 6 -> rgbf y  0. y
+		| _ -> failwith "modulo hors-la-loi"
+
+let pattern (x : int) (y : int) : color =
+  let w = 259 in
+  arcenciel (float (x+y) /. float w *. 9.)
+
 let widthdist d = abs_float (150. *. (atan (d /. 100.)) /. (atan 1.) /. 2.)
-let widthdist d = 70. +.10. *. d
+let widthdist d = 130. +. 20. *. d
 
 let modified (relief : int -> int -> float) w h =
   let modi = Array.init h (fun y -> Array.init w (fun x -> x)) in
