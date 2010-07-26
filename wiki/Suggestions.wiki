@@ -1,6 +1,10 @@
 #labels Phase-Requirements,suggestions,feature,requests
 Suggestions of projects that could be included in vitef.
 
+== Acronym ==
+
+Find an acronym. Better than with http://www.jschramm.com/acreator/
+
 == Conventional shit ==
 
   * A physical-laws sensitive drawing tool in javascript (like this java on e http://sodaplay.com/creators/soda/items/moovl)
