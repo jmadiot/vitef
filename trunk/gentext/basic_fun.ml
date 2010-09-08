@@ -22,22 +22,16 @@ let rec lookup n xs = match n with
 
 let rec insert_tree path value tree = match path , tree with
 	| []     , Leaf xs -> Leaf (value :: xs)
-	| [ n ]  , Node xs -> Node (insert_list_leaf n value xs)
 	| n :: q , Node xs -> Node (insert_list_node n q value xs)
-	| _      , _       -> Leaf []
+	| _      , _       -> failwith "Mauvais path - insert_tree"
 
-and insert_list_leaf index value xs = match index , xs with
-	| 0 , []              -> [Leaf [value]]
-	| 0 , (Leaf x) :: xs' -> (Leaf (value :: x)) :: xs'
-	| 0 , (Node _) :: _   -> []
-	| n , []              -> (Leaf []) :: (insert_list_leaf (n - 1) value [])
-	| n , x :: xs'        -> x :: (insert_list_leaf (n - 1) value xs')
-
-and insert_list_node index path value xs = match index , xs with
-	| 0 , []      -> [insert_tree path value (Node [])]
-	| 0 , x :: xs' -> (insert_tree path value x) :: xs'
-	| n , []      -> (Node []) :: (insert_list_node (n - 1) path value [])
-	| n , x :: xs' -> x :: (insert_list_node (n - 1) path value xs')
+and insert_list_node index path value xs = match index , xs , path with
+	| 0 , []       , []     -> [insert_tree path value (Leaf [])]
+	| 0 , []       , t :: q -> [insert_tree path value (Node [])]
+	| 0 , x :: xs' , _      -> (insert_tree path value x) :: xs'
+	| n , []       , []     -> (Leaf []) :: (insert_list_node (n - 1) path value [])
+	| n , []       , t :: q -> (Node []) :: (insert_list_node (n - 1) path value [])
+	| n , x :: xs' , _      -> x :: (insert_list_node (n - 1) path value xs')
 
 (** Spécifications : chaque arbre (profondeur, nombre de fils
 à chaque "étage", etc.) et les fonctions inserent donc les

@@ -11,16 +11,16 @@ let () = Random.self_init ()
 (* proper_* : fonctions ne tenant pas compte des
 branches vides *)
 
-(* tree -> nat *)
+(* tree list -> nat*)
 let proper_length xs =
     let rec aux accu = function
-		| []		     -> accu
+		| []		 -> accu
 		| (Node []) :: q -> aux accu q
 		| (Leaf []) :: q -> aux accu q
 		| _ :: q         -> aux (accu + 1) q
 	in aux 0 xs
 
-(* nat -> tree -> tree *)
+(* nat -> tree list -> tree *)
 let rec proper_lookup n xs = match n , xs with
 	| _ , []             -> failwith "Chemin trop long - proper_lookup fail"
 	| n , (Node []) :: q -> proper_lookup n q
@@ -28,20 +28,24 @@ let rec proper_lookup n xs = match n , xs with
 	| 0 , t :: _         -> t
 	| n , _ :: q         -> proper_lookup (n - 1) q
 
-(* nat -> tree -> nat *)
+(* nat -> tree list -> nat *)
 let rec proper_index n xs = match n , xs with
 	| _ , []             -> 0
 	| n , (Node []) :: q -> 1 + (proper_index n q)
 	| n , (Leaf []) :: q -> 1 + (proper_index n q)
-	| 0 , _ :: q         -> 0
+	| 0 , _ :: _         -> 0
 	| n , _ :: q         -> 1 + (proper_index (n - 1) q)
 
 (* Prendre un fils non vide au hasard *)
 let rand_tree xs =
-	proper_lookup (Random.int (proper_length xs)) xs
+	let l_xs = proper_length xs in
+	if l_xs <> 0 then proper_lookup (Random.int l_xs) xs
+	else failwith "Sous-arbre vide - rand_tree fail"
 
 let rand_list xs =
-	lookup (Random.int (List.length xs)) xs
+	let l_xs = List.length xs in
+	if l_xs <> 0 then lookup (Random.int l_xs) xs
+	else failwith "Liste vide - rand_list fail"
 
 (* Selectionner un élément en suivant un chemin totalement
 ou partiellement défini : type choice = | Rand | Int of int.
