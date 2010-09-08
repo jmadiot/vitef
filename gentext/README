@@ -37,7 +37,7 @@ DICTIONNAIRE :
   - je ne me souviens plus de la convention mais vous pouvez mater le code source de parser.c, c'est pas mal détaillé je crois
 
 TODO :
-  - print_texte.ml (améliorer)
+  - modifier construct_proposition et virer les elim_node, elim_leaf si possible
   - suppression des adjectifs en doublon
   - ajout des structures de phrases distinctes (cf. types.ml)
 
