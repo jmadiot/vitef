@@ -1,0 +1,13 @@
+{
+   "content_scripts": [ {
+      "exclude_globs": [  ],
+      "include_globs": [ "http://www.kraland.org/main.php*" ],
+      "js": [ "script.js" ],
+      "matches": [ "http://*/*", "https://*/*" ]
+   } ],
+   "converted_from_user_script": true,
+   "description": "",
+   "key": "UkwQAAGImEjpMfwVWj7Xf6eqozaj/1FZaxXr/MH7pHY=",
+   "name": "Kraland - Forum - Ignore List",
+   "version": "1.0"
+}
