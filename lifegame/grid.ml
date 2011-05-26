@@ -113,11 +113,18 @@ let create m n p =
  done;
 new_grid
 
-let test proba =
- let rec itere grid = function
-  | 0 -> let new_grid = update grid proba in print new_grid; let () = synchronize () in let _ = wait_next_event [] in ();
-  | n -> let new_grid = update grid proba in print new_grid; let () = synchronize () in itere new_grid (n-1)
- in
- itere (create 350 600 5) 1000
+let step grid proba =
+	let new_grid = update grid proba in
+	let () = print new_grid in
+	let () = synchronize () in
+	new_grid
 
-let () = test 10
+let rec itere grid proba = function
+  | 0 -> let _ = step grid proba in ()
+  | n -> let new_grid = step grid proba in itere new_grid proba (n-1)
+
+
+let test =
+	let () = itere (create 350 600 5) 10 1000 in
+	wait_next_event []
+

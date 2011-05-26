@@ -1,4 +1,6 @@
-Require Import ZArith.
+Require Import ZArith Omega.
+Ltac c:=(simpl in*;try congruence)with w x:=rewrite(Pmult_comm x)in*;c with i:=intros;auto.
 Let sqrt_2 n m:n*n=2*m*m->m=0.
-intros;destruct m;[easy|];destruct n;[simpl in H; congruence|];rewrite<-nat_of_P_o_P_of_succ_nat_eq_succ;do 4 rewrite<-nat_of_P_o_P_of_succ_nat_eq_succ in*;do 3 rewrite<-nat_of_P_mult_morphism in*;apply nat_of_P_inj in H;elimtype False;simpl in*;remember(P_of_succ_nat n);remember(P_of_succ_nat m)as b;clear n m Heqp Heqb;revert p b H;induction p;intros;simpl in H;try congruence;rewrite Pmult_comm in H;simpl in*;induction b;simpl in H;try congruence;rewrite (Pmult_comm b) in H;simpl in*;apply(IHp b);injection H;easy.
+i;destruct m;destruct n;c.
+set nat_of_P_o_P_of_succ_nat_eq_succ;rewrite<-e;do 7(rewrite<-e in*||rewrite<-nat_of_P_mult_morphism in*);apply nat_of_P_inj in H;elimtype False;c;remember(P_of_succ_nat n);remember(P_of_succ_nat m)as b;clear-H;revert p b H;induction p;i;c;w p;destruct b;c;w b.
 Qed.
