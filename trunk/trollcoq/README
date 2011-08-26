@@ -1,0 +1,2 @@
+DL coq at http://coq.inria.fr/distrib/V8.3pl2/files/coq-8.3pl2.tar.gz
+patched created like that: diff -rupN coq-8.3pl2 modifiedcoq > trollcoq.patch
