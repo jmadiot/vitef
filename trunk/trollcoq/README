@@ -1,2 +1,11 @@
-DL coq at http://coq.inria.fr/distrib/V8.3pl2/files/coq-8.3pl2.tar.gz
-patched created like that: diff -rupN coq-8.3pl2 modifiedcoq > trollcoq.patch
+I. Apply the patch
+
+i.   Download coq: [wget http://coq.inria.fr/distrib/V8.3pl2/files/coq-8.3pl2.tar.gz]
+ii.  Extract the archive [tar xf coq-8.3pl2.tar.gz]
+iii. Move the patch to the coq directory [cp trollcoq.patch coq-8.3-pl2/]
+iv.  Apply the patch [patch -p1 < trollcoq.patch]
+
+II. Create a new patch
+
+i.  Generate a new diff using [diff -rupN coq-8.3pl2 modifiedcoq > trollcoq.X.patch]
+ii. Add it to the svn and send it [svn add trollcoq.X.patch && svn ci]
