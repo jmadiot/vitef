@@ -13,20 +13,22 @@ function check_list(){
 
 function parent() {
 	local id=$1
-	if(! check_list $id)
-		then
-		#get page
-		wget -q http://genealogy.math.ndsu.nodak.edu/id.php?id=$id
+	#get page
+	wget -q http://genealogy.math.ndsu.nodak.edu/id.php?id=$id
 
-		#get name
-		local temp=`cat id.php\?id\=$id  | grep '<title' | sed 's$<title>The Mathematics Genealogy Project - \(.*\)<\(.\)*$\1$g'`
-		father=$temp
-		if [[ "$son" == "" ]]; then
-			son=$father
-		else
-			echo "\"$father\" -> \"$son\";"
-			son=$father
-		fi
+	#get name
+	local temp=`cat id.php\?id\=$id  | grep '<title' | sed 's$<title>The Mathematics Genealogy Project - \(.*\)<\(.\)*$\1$g'`
+	father=$temp
+	if [[ "$son" == "" ]]; then
+		son=$father
+	else
+		echo "\"$father\" -> \"$son\";"
+		son=$father
+	fi
+	
+	# already treated ?
+	if ( ! check_list $id )
+	then
 		# test if there is an advisor
 		if [[ `cat id.php\?id\=$id | grep Advisor` == *Unknown*  ]]; then 
 			rm id.php\?id\=$id
@@ -46,15 +48,12 @@ function parent() {
 	fi
 }
 
-#initialize
-touch .list
 
+echo -n "" > .list #initialize
 echo "digraph genealogy {"
 for id in $*; do
-		son=""
+	son=""
 	parent $id
 done
 echo "}"
-
-# clean up
-rm .list
+rm .list # clean up
