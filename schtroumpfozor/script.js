@@ -5,7 +5,7 @@
 // ==/UserScript==
 Message = {
 	check : function(item){
-		return item.getElementsByTagName('p')[0].innerHTML.indexOf('chtroumpf') != -1;
+		return item.innerHTML.indexOf('chtroumpf') != -1;
 	},
 	filtrage: function(){
 		if(posts = document.getElementsByClassName("post_container")){
