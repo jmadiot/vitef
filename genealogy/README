@@ -3,4 +3,3 @@ id_list est une liste d'identifiants sur http://genealogy.math.ndsu.nodak.edu/
 
 Sortie : graphe (.dot) des ancêtres sur "mathematics genealogy project" des identifiants fournis.
 
-Warning : Sale. La complexité est de l'ordre de la somme des longueurs des chemins (i.e. les mariages incestueux augmentent la complexité).
