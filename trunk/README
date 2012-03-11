@@ -1,8 +1,14 @@
 Liste des "projets":
 
+forcemake : construit avec make quand un fichier est modifié. Pratique pour pdflatex
+
+fouine : les scripts coq les plus courts !
+
 gaircrack : Une interface graphique (en gtkdialog, oui, oui) pour la suite aircrack
 
 gentext : Un programme de génération de phrases à peu près sensées
+
+gravitybam : Jeu interplanétaire en SVG + Javascript
 
 jstmd : JavaScript Turing Machine Drawer
 
@@ -14,7 +20,8 @@ stereo : defonce-toi les yeux pour voir des bidules en 3D
 
 tictactoe5 : Puissance 5 (aligner 5 cases de sa couleur)
 
+trollcoq : Mod user-friendly pour coqide / coqtop
+
 vroum : Evite les cubes avec ton vaisseau spatial (et ta souris) !
 
 xjumps : Un xjump-like en javascript
-
