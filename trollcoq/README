@@ -4,6 +4,8 @@ i.   Download coq: [wget http://coq.inria.fr/distrib/V8.3pl2/files/coq-8.3pl2.ta
 ii.  Extract the archive [tar xf coq-8.3pl2.tar.gz]
 iii. Move the patch to the coq directory [cp trollcoq.patch coq-8.3-pl2/]
 iv.  Apply the patch [patch -p1 < trollcoq.patch]
+v.   ???
+vi.  Profit!
 
 II. Create a new patch
 

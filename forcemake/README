@@ -1,0 +1,14 @@
+INSTALLATION INSTRUCTIONS
+
+  Add it to your $PATH:
+
+    $ chmod +x forcemake.sh
+    $ cp forcemake.sh /your/path/forcemake
+
+USAGE
+
+  Use it instead of make:
+
+    $ cd your/dev/folder/
+    $ forcemake
+
