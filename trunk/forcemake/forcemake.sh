@@ -20,7 +20,7 @@
 # - quotes in OPTIONS are stripped. DEAL WITH IT. B-)
 
 name="forcemake"
-to_highlight="! LaTeX Error|^l\.[0-9]* |line [0-9]*|$" #just keep the |$
+to_highlight="! LaTeX Error|^l\.[0-9][0-9]* |line [0-9][0-9]*|$" #just keep the |$
 use_graphical_notification="true"
 
 # To use with pdflatex you can add "cat /dev/null |" before to avoid
@@ -43,18 +43,28 @@ notuptodatemsg() {
 
 makeerrormsg() {
   echo
-  echo "$name: \033[1;31mwrong call of make\033[0m (waiting for your fix)"
+  echo "$name: \033[1;31mwrong call of make\033[0m (waiting for you to fix it)"
   echo
 }
 
+last_was_failure=1
+
 notifyrecovery() {
-  $use_graphical_notification && notify-send -t 2000 "$name:
-No more failure" || :
+  if [ "$last_was_failure" = "1" ]
+  then
+    last_was_failure=0
+    $use_graphical_notification \
+      && notify-send -t 2000 "$name:
+No more failure"
+      \ || :
+  fi
 }
+
+
 
 failuremsg() {
   echo
-  echo "$name: \033[1;31merror\033[0m (waiting for your fix)"
+  echo "$name: \033[1;31mcompilation error\033[0m (waiting for you to fix it)"
   $use_graphical_notification && notify-send -t 2000 "$name:
 Compilation failure" || :
 }
@@ -65,12 +75,15 @@ Compilation failure" || :
 # precise than [make -q] but it seems alright.
 block_until_update()
 {
-  # The date of the directory seems to be a good indicator
+  # The date of the directory seemed to be a good indicator. However,
+  # recovery files are modified more often, so we use the dates of the
+  # files that can be listed with ls.
   getstate() {
-    date +%s -r .
+    # date +%s -r .
+    for i in `ls`; do date +%s -r $i; done | md5sum -t | grep -o '[0-9a-f]*'
   }
   statelastfailure=$(getstate)
-  while [ "$(getstate)" -eq "$statelastfailure" ];
+  while [ "$(getstate)" = "$statelastfailure" ];
   do
     sleep 0.1
   done
