@@ -1,0 +1,44 @@
+NAME
+
+  winman - manual window tiling without mouse
+
+SYNOPSIS
+  
+  winman OPTION
+
+DESCRIPTION
+  
+  move and resize the active window, or toggle "always on top".
+  
+  OPTION is one of: left, right, up, down, ttop.
+  
+    left: 50% width, 100% height, left side.
+    
+    right: 50% width, 100% height, right side
+    
+    up: 75% width, 75% height, center
+    
+    down: 100% width, 25% height, bottom, activate "always on top"
+    
+    atop: toggle "always on top"
+
+  Except for ttop and down, every call of winman cancel the "always on
+  top" and "fullscreen" options.
+
+DEPENDENCIES
+  
+  wmctrl, which is probably compatible with you window manager.  See
+  http://tomas.styblo.name/wmctrl/ to be sure.
+  
+  wmctrl does not handle the up/down bar so I set it to my personal
+  settings, so you may see some space at the bottom or hidden parts of
+  your window at the top. You can change it by setting the variable
+  $SPACE_BOTTOM is the source. In the future, this could be automatic.
+
+INSTALLATION INSTRUCTIONS
+
+  Set as shortcut:
+
+    sh /path/to/winman.sh OPTION
+
+  I suggest Shift+Alt+[←,→,↑,↓], and "PageUp" for ttop.
