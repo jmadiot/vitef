@@ -16,7 +16,9 @@ unset_on_top()
 WIDTH=`xdpyinfo | awk '/dimensions:/ {print $2}' | cut -f1 -d'x'`
 HEIGHT=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
 
-wmctrl -r :ACTIVE: -b remove,maximized_horz,fullscreen
+wmctrl -r :ACTIVE: -b remove,maximized_horz
+wmctrl -r :ACTIVE: -b remove,maximized_vert
+wmctrl -r :ACTIVE: -b remove,fullscreen
 
 # Some commands are duplicated, because sometimes I need to repeat the
 # command. No idea why.

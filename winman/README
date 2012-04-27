@@ -22,7 +22,7 @@ DESCRIPTION
     
     atop: toggle "always on top"
 
-  Except for ttop and down, every call of winman cancel the "always on
+  Except for atop and down, every call of winman cancel the "always on
   top" and "fullscreen" options.
 
 DEPENDENCIES
@@ -41,4 +41,4 @@ INSTALLATION INSTRUCTIONS
 
     sh /path/to/winman.sh OPTION
 
-  I suggest Shift+Alt+[←,→,↑,↓], and "PageUp" for ttop.
+  I suggest Shift+Alt+[←,→,↑,↓], and "PageUp" for atop.
