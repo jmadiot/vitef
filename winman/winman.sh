@@ -24,7 +24,7 @@ W=`xdpyinfo | awk '/dimensions:/ {print $2}' | cut -f1 -d'x'`
 H=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
 
 # default width and heighth given the available info
-DWDT=$(($W-$LFT-$SRGT))
+DWDT=$(($W-$SLFT-$SRGT))
 DHGT=$(($H-$STOP-$SBOT-$SBRD))
 
 wmctrl -r :ACTIVE: -b remove,maximized_horz
