@@ -1,10 +1,14 @@
 #!/bin/sh
 
-# Size of you bar at the bottom of the screen.
-SPACE_TOP=23
-SPACE_BOTTOM=0
-SPACE_LEFT=55
-SPACE_RIGHT=0
+# size of the bars around your screen:
+# top, bottom, left, right
+STOP=20
+SBOT=0
+SLFT=0
+SRGT=0
+# size of the top+bottom borders of your windows
+# (useful only for (up/low)(left/right))
+SBRD=18
 
 set_on_top()
 {
@@ -19,55 +23,83 @@ unset_on_top()
 W=`xdpyinfo | awk '/dimensions:/ {print $2}' | cut -f1 -d'x'`
 H=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
 
-WIDTH=$((W-SPACE_LEFT-SPACE_RIGHT))
-HEIGHT=$((H-SPACE_TOP-SPACE_BOTTOM))
+# default width and heighth given the available info
+DWDT=$(($W-$LFT-$SRGT))
+DHGT=$(($H-$STOP-$SBOT-$SBRD))
 
 wmctrl -r :ACTIVE: -b remove,maximized_horz
 wmctrl -r :ACTIVE: -b remove,maximized_vert
 wmctrl -r :ACTIVE: -b remove,fullscreen
 
-# Some commands are duplicated, because sometimes I need to repeat the
-# command. No idea why.
+# put active window on the lower left corner
+if [ "$1" = "lowleft" ]; then
+  WDT=$(($DWDT/2))
+  HGT=$((($DHGT-$SBRD)/2))
+  TOP=$(($HGT+$STOP+$SBRD))
+  unset_on_top
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$TOP,$WDT,$HGT
+fi
+
+# put active window on the upper left corner
+if [ "$1" = "upleft" ]; then
+  WDT=$(($DWDT/2))
+  HGT=$((($DHGT-$SBRD)/2))
+  unset_on_top
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$STOP,$WDT,$HGT
+fi
 
 # put active window on left side
 if [ "$1" = "left" ]; then
-  WDT=$(($WIDTH/2))
+  WDT=$(($DWDT/2))
   unset_on_top
-  wmctrl -r :ACTIVE: -b add,maximized_vert
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$SPACE_LEFT,$SPACE_TOP,$WDT,-1
-  wmctrl -r :ACTIVE: -b add,maximized_vert
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$SPACE_LEFT,$SPACE_TOP,$WDT,-1
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$STOP,$WDT,$DHGT
+fi
+
+# put active window on the lower right corner
+if [ "$1" = "lowright" ]; then
+  WDT=$(($DWDT/2))
+  HGT=$((($DHGT-$SBRD)/2))
+  LFT=$(($WDT+$SLFT))
+  TOP=$(($HGT+$STOP+$SBRD))
+  unset_on_top
+  wmctrl -r :ACTIVE: -e 0,$LFT,$TOP,$WDT,$HGT
+fi
+
+# put active window on the upper right corner
+if [ "$1" = "upright" ]; then
+  WDT=$(($DWDT/2))
+  HGT=$((($DHGT-$SBRD)/2))
+  LFT=$(($WDT+$SLFT))
+  unset_on_top
+  wmctrl -r :ACTIVE: -e 0,$LFT,$STOP,$WDT,$HGT
 fi
 
 # put active window on right side
 if [ "$1" = "right" ]; then
-  WDT=$(($WIDTH/2))
-  PADDING=$(($WDT+$SPACE_LEFT))
+  WDT=$(($DWDT/2))
+  LFT=$(($WDT+$SLFT))
   unset_on_top
-  wmctrl -r :ACTIVE: -b add,maximized_vert 
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$PADDING,$SPACE_TOP,$WDT,-1  
-  wmctrl -r :ACTIVE: -b add,maximized_vert 
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$PADDING,$SPACE_TOP,$WDT,-1  
+  wmctrl -r :ACTIVE: -e 0,$LFT,$STOP,$WDT,$DHGT
 fi
 
 # put active window at the bottom of the screen (good for terminals)
 if [ "$1" = "down" ]; then
-  H=$(($HEIGHT/4))
+  H=$(($DHGT/4))
   wmctrl -r :ACTIVE: -b add,maximized_horz
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$SPACE_LEFT,$(($HEIGHT-$H)),$WIDTH,$H
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$(($DHGT-$H)),$DWDT,$H
   wmctrl -r :ACTIVE: -b add,maximized_horz
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$SPACE_LEFT,$(($HEIGHT-$H)),$WIDTH,$H
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$(($DHGT-$H)),$DWDT,$H
   set_on_top
 fi
 
 # put active window at the center of the screen
-if [ "$1" = "up" ]; then
-  DH=$(($HEIGHT/8))
-  DW=$(($WIDTH/8))
-  PADL=$(($SPACE_LEFT+$DW))
-  PADT=$(($SPACE_TOP+$DH))
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$PADL,$PADT,$(($WIDTH-2*$DW)),$(($HEIGHT-2*$DH))
-  wmctrl -r :ACTIVE: -e $SPACE_BOTTOM,$PADL,$PADT,$(($WIDTH-2*$DW)),$(($HEIGHT-2*$DH))
+if [ "$1" = "center" ]; then
+  DH=$(($DHGT/8))
+  DW=$(($DWDT/8))
+  PADL=$(($SLFT+$DW))
+  PADT=$(($TOP+$DH))
+  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
+  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
   unset_on_top
 fi
 
