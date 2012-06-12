@@ -109,6 +109,12 @@ center() {
   unset_on_top
 }
 
+lastscreen() {
+  last=$(wmctrl -d | tail -n1 | grep -o ^[0-9][0-9]*)
+  if [ "$last" = "" ]; then last=0; fi
+  wmctrl -r :ACTIVE: -t $last
+}
+
 command="$1"
 debug $command
 
@@ -119,6 +125,7 @@ case $command in
   down)       ydown;;
   center)     center;;
   atop)       wmctrl -r :ACTIVE: -b toggle,above;;
+  lastscreen) lastscreen;;
   fullscreen) wmctrl -r :ACTIVE: -b toggle,fullscreen;;
   *)          debug "unknown command: [$command]"
 esac
