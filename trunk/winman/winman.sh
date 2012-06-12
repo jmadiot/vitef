@@ -1,24 +1,32 @@
-#!/bin/sh
+#!/bin/bash
+
+#win_id=$(xdotool getactivewindow)
+#lockfile=/tmp/winman-$win_id
+#if [ -e "$lockfile" ]; then echo "Locked: waiting"; else echo "No lock"; fi
+#while [ -e "$lockfile" ]; do sleep 0.03 ; done
+#touch "$lockfile"
+# Above, a lock. Most important thing is: no deadlock
+# Sometimes the lock won't work, but that's ok.
+
+# In case of error, the lock file will stay, so we should maybe check
+# this out before waiting. Here is a wonderful workaround
+#(sleep 1 && rm -f "$lockfile") &
+
 
 # size of the bars around your screen:
 # top, bottom, left, right
-STOP=20
-SBOT=0
+STOP=0
+SBOT=20
 SLFT=0
 SRGT=0
 # size of the top+bottom borders of your windows
 # (useful only for (up/low)(left/right))
 SBRD=18
 
-set_on_top()
-{
-  wmctrl -r :ACTIVE: -b add,above
-}
-
-unset_on_top()
-{
-  wmctrl -r :ACTIVE: -b remove,above
-}
+debug()        { echo "$1" | tee -a /tmp/winmanlog; }
+set_on_top()   { wmctrl -r :ACTIVE: -b add,above;    }
+unset_on_top() { wmctrl -r :ACTIVE: -b remove,above; }
+fullscreen()   { wmctrl -r :ACTIVE: -b toggle,fullscreen; }
 
 W=`xdpyinfo | awk '/dimensions:/ {print $2}' | cut -f1 -d'x'`
 H=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
@@ -27,73 +35,71 @@ H=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
 DWDT=$(($W-$SLFT-$SRGT))
 DHGT=$(($H-$STOP-$SBOT-$SBRD))
 
-wmctrl -r :ACTIVE: -b remove,maximized_horz
-wmctrl -r :ACTIVE: -b remove,maximized_vert
-wmctrl -r :ACTIVE: -b remove,fullscreen
+#wmctrl -r :ACTIVE: -b remove,maximized_horz
+#wmctrl -r :ACTIVE: -b remove,maximized_vert
+#wmctrl -r :ACTIVE: -b remove,fullscreen
 
-# put active window on the lower left corner
-if [ "$1" = "lowleft" ]; then
+
+## Getting informations about the window
+win_id=$(xdotool getactivewindow)
+win_x=$(xdotool getwindowgeometry $win_id | grep Position | grep -o [0-9]* | sed -n 1p)
+win_y=$(xdotool getwindowgeometry $win_id | grep Position | grep -o [0-9]* | sed -n 2p)
+win_w=$(xdotool getwindowgeometry $win_id | grep Geometry | grep -o [0-9]* | sed -n 1p)
+win_h=$(xdotool getwindowgeometry $win_id | grep Geometry | grep -o [0-9]* | sed -n 2p)
+
+
+## one-dimensional primitives
+
+xsame() {
+  dist="$((($win_x-$LFT)*($win_x-$LFT)+($win_w-$WDT)*($win_w-$WDT)))"
+  debug "wid=$win_id dist=$dist : $win_x==$LFT ∧ $win_w==$WDT"
+  if [ "$dist" -lt "10" ]; then yfill; fi
+}
+
+ysame() {
+  dist="$((($win_y-$TOP)*($win_y-$TOP)+($win_h-$HGT)*($win_h-$HGT)))"
+  debug "wid=$win_id dist=$dist : $win_y==$TOP ∧ $win_h==$HGT"
+  if [ "$dist" -lt "10" ]; then xfill; fi
+}
+
+xleft() {
+  LFT=$(($SLFT))
   WDT=$(($DWDT/2))
+  wmctrl -r :ACTIVE: -e 1,$LFT,$win_y,$WDT,$win_h
+  xsame
+}
+
+xright() {
+  WDT=$(($DWDT/2))
+  HGT=$((($DHGT-$SBRD)/2))
+  LFT=$(($WDT+$SLFT))
+  wmctrl -r :ACTIVE: -e 0,$LFT,$win_y,$WDT,$win_h
+  xsame
+}
+
+xfill() {
+  wmctrl -r :ACTIVE: -e 0,$SLFT,$win_y,$DWDT,$win_h
+}
+
+yup() {
+  TOP=$STOP
+  HGT=$((($DHGT-$SBRD)/2))
+  wmctrl -r :ACTIVE: -e 0,$win_x,$TOP,$win_w,$HGT
+  ysame
+}
+
+ydown() {
   HGT=$((($DHGT-$SBRD)/2))
   TOP=$(($HGT+$STOP+$SBRD))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$SLFT,$TOP,$WDT,$HGT
-fi
+  wmctrl -r :ACTIVE: -e 0,$win_x,$TOP,$win_w,$HGT
+  ysame
+}
 
-# put active window on the upper left corner
-if [ "$1" = "upleft" ]; then
-  WDT=$(($DWDT/2))
-  HGT=$((($DHGT-$SBRD)/2))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$SLFT,$STOP,$WDT,$HGT
-fi
+yfill() {
+  wmctrl -r :ACTIVE: -e 0,$win_x,$STOP,$win_w,$DHGT
+}
 
-# put active window on left side
-if [ "$1" = "left" ]; then
-  WDT=$(($DWDT/2))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$SLFT,$STOP,$WDT,$DHGT
-fi
-
-# put active window on the lower right corner
-if [ "$1" = "lowright" ]; then
-  WDT=$(($DWDT/2))
-  HGT=$((($DHGT-$SBRD)/2))
-  LFT=$(($WDT+$SLFT))
-  TOP=$(($HGT+$STOP+$SBRD))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$LFT,$TOP,$WDT,$HGT
-fi
-
-# put active window on the upper right corner
-if [ "$1" = "upright" ]; then
-  WDT=$(($DWDT/2))
-  HGT=$((($DHGT-$SBRD)/2))
-  LFT=$(($WDT+$SLFT))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$LFT,$STOP,$WDT,$HGT
-fi
-
-# put active window on right side
-if [ "$1" = "right" ]; then
-  WDT=$(($DWDT/2))
-  LFT=$(($WDT+$SLFT))
-  unset_on_top
-  wmctrl -r :ACTIVE: -e 0,$LFT,$STOP,$WDT,$DHGT
-fi
-
-# put active window at the bottom of the screen (good for terminals)
-if [ "$1" = "down" ]; then
-  H=$(($DHGT/4))
-  wmctrl -r :ACTIVE: -b add,maximized_horz
-  wmctrl -r :ACTIVE: -e 0,$SLFT,$(($DHGT-$H)),$DWDT,$H
-  wmctrl -r :ACTIVE: -b add,maximized_horz
-  wmctrl -r :ACTIVE: -e 0,$SLFT,$(($DHGT-$H)),$DWDT,$H
-  set_on_top
-fi
-
-# put active window at the center of the screen
-if [ "$1" = "center" ]; then
+center() {
   DH=$(($DHGT/8))
   DW=$(($DWDT/8))
   PADL=$(($SLFT+$DW))
@@ -101,15 +107,20 @@ if [ "$1" = "center" ]; then
   wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
   wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
   unset_on_top
-fi
+}
 
-# toggle "window always on top"
-if [ "$1" = "atop" ]; then
-  wmctrl -r :ACTIVE: -b toggle,above
-fi
+command="$1"
+debug $command
 
-# put active window in fullscreen mode
-if [ "$1" = "fullscreen" ]; then
-  wmctrl -r :ACTIVE: -b toggle,fullscreen
-fi
+case $command in
+  left)       xleft;;
+  right)      xright;;
+  up)         yup;;
+  down)       ydown;;
+  center)     center;;
+  atop)       wmctrl -r :ACTIVE: -b toggle,above;;
+  fullscreen) wmctrl -r :ACTIVE: -b toggle,fullscreen;;
+  *)          debug "unknown command: [$command]"
+esac
 
+#rm -f "$lockfile"
