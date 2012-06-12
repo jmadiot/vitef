@@ -17,7 +17,7 @@
 # size of the bars around your screen:
 # top, bottom, left, right
 STOP=0
-SBOT=20
+SBOT=22
 SLFT=0
 SRGT=0
 # size of the top+bottom borders of your windows
@@ -92,6 +92,7 @@ xright() {
 
 xfill() {
   wmctrl -r :ACTIVE: -e 0,$SLFT,$win_y,$DWDT,$win_h
+  wmctrl -r :ACTIVE: -b add,maximized_horz
 }
 
 yup() {
@@ -112,6 +113,7 @@ ydown() {
 
 yfill() {
   wmctrl -r :ACTIVE: -e 0,$win_x,$STOP,$win_w,$DHGT
+  wmctrl -r :ACTIVE: -b add,maximized_vert
 }
 
 center() {
