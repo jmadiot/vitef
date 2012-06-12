@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 #win_id=$(xdotool getactivewindow)
@@ -21,7 +22,10 @@ SLFT=0
 SRGT=0
 # size of the top+bottom borders of your windows
 # (useful only for (up/low)(left/right))
-SBRD=18
+SBRD=0
+# ça pourrait être réglé avec d'autres infos, ce truc, moi ça me fait
+# des choses bizarres
+
 
 debug()        { echo "$1" | tee -a /tmp/winmanlog; }
 set_on_top()   { wmctrl -r :ACTIVE: -b add,above;    }
@@ -50,6 +54,12 @@ win_h=$(xdotool getwindowgeometry $win_id | grep Geometry | grep -o [0-9]* | sed
 
 ## one-dimensional primitives
 
+removemax() {
+  wmctrl -r :ACTIVE: -b remove,maximized_horz
+  wmctrl -r :ACTIVE: -b remove,maximized_vert
+  wmctrl -r :ACTIVE: -b remove,fullscreen
+}
+
 xsame() {
   dist="$((($win_x-$LFT)*($win_x-$LFT)+($win_w-$WDT)*($win_w-$WDT)))"
   debug "wid=$win_id dist=$dist : $win_x==$LFT ∧ $win_w==$WDT"
@@ -63,13 +73,16 @@ ysame() {
 }
 
 xleft() {
+  removemax
   LFT=$(($SLFT))
   WDT=$(($DWDT/2))
+  wmctrl -r :ACTIVE: -e 1,$LFT,$win_y,$WDT,$win_h
   wmctrl -r :ACTIVE: -e 1,$LFT,$win_y,$WDT,$win_h
   xsame
 }
 
 xright() {
+  removemax
   WDT=$(($DWDT/2))
   HGT=$((($DHGT-$SBRD)/2))
   LFT=$(($WDT+$SLFT))
@@ -82,6 +95,7 @@ xfill() {
 }
 
 yup() {
+  removemax
   TOP=$STOP
   HGT=$((($DHGT-$SBRD)/2))
   wmctrl -r :ACTIVE: -e 0,$win_x,$TOP,$win_w,$HGT
@@ -89,6 +103,7 @@ yup() {
 }
 
 ydown() {
+  removemax
   HGT=$((($DHGT-$SBRD)/2))
   TOP=$(($HGT+$STOP+$SBRD))
   wmctrl -r :ACTIVE: -e 0,$win_x,$TOP,$win_w,$HGT
@@ -100,6 +115,7 @@ yfill() {
 }
 
 center() {
+  removemax
   DH=$(($DHGT/8))
   DW=$(($DWDT/8))
   PADL=$(($SLFT+$DW))
