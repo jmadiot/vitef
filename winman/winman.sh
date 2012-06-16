@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 #win_id=$(xdotool getactivewindow)
@@ -25,6 +24,8 @@ SRGT=0
 SBRD=0
 # ça pourrait être réglé avec d'autres infos, ce truc, moi ça me fait
 # des choses bizarres
+
+sensibility=10
 
 
 debug()        { echo "$1" | tee -a /tmp/winmanlog; }
@@ -69,13 +70,13 @@ removemax() {
 xsame() {
   dist="$((($win_x-$LFT)*($win_x-$LFT)+($win_w-$WDT)*($win_w-$WDT)))"
   debug "wid=$win_id dist=$dist : $win_x==$LFT ∧ $win_w==$WDT"
-  if [ "$dist" -lt "10" ]; then yfill; fi
+  if [ "$dist" -lt "$sensibility" ]; then yfill; fi
 }
 
 ysame() {
   dist="$((($win_y-$TOP)*($win_y-$TOP)+($win_h-$HGT)*($win_h-$HGT)))"
   debug "wid=$win_id dist=$dist : $win_y==$TOP ∧ $win_h==$HGT"
-  if [ "$dist" -lt "10" ]; then xfill; fi
+  if [ "$dist" -lt "$sensibility" ]; then xfill; fi
 }
 
 xleft() {
@@ -126,10 +127,31 @@ center() {
   removemax
   DH=$(($DHGT/8))
   DW=$(($DWDT/8))
+  TOP=$DH
+  LFT=$DW
+  WDT=$(($DWDT-2*$DW))
+  HGT=$(($DHGT-2*$DH))
   PADL=$(($SLFT+$DW))
-  PADT=$(($TOP+$DH))
-  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
-  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$(($DWDT-2*$DW)),$(($DHGT-2*$DH))
+  PADT=$(($STOP+$DH))
+  
+  dist="$((($win_x-$LFT)*($win_x-$LFT)+($win_w-$WDT)*($win_w-$WDT)))"
+  debug "wid=$win_id dist=$dist : $win_x==$LFT ∧ $win_w==$WDT"
+  dist="$(($dist+($win_y-$TOP)*($win_y-$TOP)+($win_h-$HGT)*($win_h-$HGT)))"
+  debug "wid=$win_id dist=$dist : $win_y==$TOP ∧ $win_h==$HGT"
+  if [ "$dist" -lt "$((2*$sensibility))" ]; then
+    DIV=16
+    DH=$(($DHGT/$DIV))
+    DW=$(($DWDT/$DIV))
+    TOP=$DH
+    LFT=$DW
+    WDT=$(($DWDT-2*$DW))
+    HGT=$(($DHGT-2*$DH))
+    PADL=$(($SLFT+$DW))
+    PADT=$(($STOP+$DH))    
+  fi
+  
+  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$WDT,$HGT
+  wmctrl -r :ACTIVE: -e 0,$PADL,$PADT,$WDT,$HGT
   unset_on_top
 }
 
