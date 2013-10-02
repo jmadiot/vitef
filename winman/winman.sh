@@ -36,7 +36,7 @@ fullscreen()   { wmctrl -r :ACTIVE: -b toggle,fullscreen; }
 W=`xdpyinfo | awk '/dimensions:/ {print $2}' | cut -f1 -d'x'`
 H=`xdpyinfo | grep dimensions | sed 's/.*dimensions[^x]*x\([^ ]*\).*$/\1/'`
 
-# default width and heighth given the available info
+# default width and height given the available info
 DWDT=$(($W-$SLFT-$SRGT))
 DHGT=$(($H-$STOP-$SBOT-$SBRD))
 
@@ -49,14 +49,14 @@ DHGT=$(($H-$STOP-$SBOT-$SBRD))
 win_id=$(xdotool getactivewindow)
 # win_x=$(xdotool getwindowgeometry $win_id | grep Position | grep -o [0-9]* | sed -n 1p)
 # win_y=$(xdotool getwindowgeometry $win_id | grep Position | grep -o [0-9]* | sed -n 2p)
-win_w=$( xwininfo -id $win_id | grep Width | grep -o [0-9]*)
-win_h=$( xwininfo -id $win_id | grep Height | grep -o [0-9]*)
+win_w=$( xwininfo -id $win_id | grep Width | grep -o '[0-9]*')
+win_h=$( xwininfo -id $win_id | grep Height | grep -o '[0-9]*')
 #win_w=$(xdotool getwindowgeometry $win_id | grep Geometry | grep -o [0-9]* | sed -n 1p)
 #win_h=$(xdotool getwindowgeometry $win_id | grep Geometry | grep -o [0-9]* | sed -n 2p)
-win_x=$( xwininfo -id $win_id | grep Absolute.*X | grep -o [0-9]*)
-win_y=$( xwininfo -id $win_id | grep Absolute.*Y | grep -o [0-9]*)
-win_dx=$(xwininfo -id $win_id | grep Relative.*X | grep -o [0-9]*)
-win_dy=$(xwininfo -id $win_id | grep Relative.*Y | grep -o [0-9]*)
+win_x=$( xwininfo -id $win_id | grep Absolute.*X | grep -o '[0-9]*')
+win_y=$( xwininfo -id $win_id | grep Absolute.*Y | grep -o '[0-9]*')
+win_dx=$(xwininfo -id $win_id | grep Relative.*X | grep -o '[0-9]*')
+win_dy=$(xwininfo -id $win_id | grep Relative.*Y | grep -o '[0-9]*')
 win_x=$(($win_x-$win_dx))
 win_y=$(($win_y-$win_dy))
 
