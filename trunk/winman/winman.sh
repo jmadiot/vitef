@@ -167,15 +167,16 @@ command="$1"
 debug $command
 
 case $command in
-  left)       xleft;;
-  right)      xright;;
-  up)         yup;;
-  down)       ydown;;
-  center)     center;;
-  atop)       wmctrl -r :ACTIVE: -b toggle,above;;
-  lastscreen) lastscreen;;
-  fullscreen) wmctrl -r :ACTIVE: -b toggle,fullscreen;;
-  *)          debug "unknown command: [$command]"
+    left)       xleft;;
+    right)      xright;;
+    up)         yup;;
+    down)       ydown;;
+    center)     center;;
+    atop)       wmctrl -r :ACTIVE: -b toggle,above;;
+    lastscreen) lastscreen;;
+    fullscreen) wmctrl -r :ACTIVE: -b toggle,fullscreen;;
+    maximize)   wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz ;;
+    *)          debug "unknown command: [$command]"
 esac
 
 #rm -f "$lockfile"
