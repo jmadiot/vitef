@@ -24,6 +24,10 @@ var mut;
 var left_pressed = false;
 var right_pressed = false;
 var up_pressed = false;
+var touch_pressed = false;
+
+var launchx = 0;
+var launchy = 0;
 
 // reset everything
 function restart()
@@ -52,7 +56,8 @@ function restart()
 	
 }
 
-// deal with keyboard events
+
+// deals with keyboard events
 function keydown(e)
 {
 	var touche = (window.Event) ? e.which : e.keyCode;
@@ -139,6 +144,17 @@ function moveright()
 	looksto=2;
 }
 
+// move according to touch direction
+function move(){
+	//TODO update looksto
+	if(dist() == 0){
+   		speedx = speedx + Math.min(Math.max(-35, launchx /5), 35);
+   		speedy = speedy + Math.max(-35, (Math.min(launchy, 0)));
+	}
+	touch_pressed = false;
+}
+
+
 // initializes the queue with random levels 
 function fill_Q()
 {
@@ -161,6 +177,7 @@ function changespeed()
 	if(left_pressed) moveleft();
 	if(right_pressed) moveright();
 	if(up_pressed) moveup();
+	if(touch_pressed) move();
 	if(posx + speedx < 46)
 	{
 		posx = 46; speedx = - speedx;
@@ -213,7 +230,7 @@ function draw_Q(ctx)
 // draws everything ... tricky
 function draw()
 {
-  var ctx = document.getElementById('can').getContext('2d');
+	var ctx = document.getElementById('can').getContext('2d');
 	if(begin && !lost)
 	{						
 		//speedup if the player is too high 
@@ -270,9 +287,42 @@ function draw()
 function init()
 {
 	var ctx = document.getElementById('can').getContext('2d');
-  ctx.strokeStyle='white';
+	ctx.strokeStyle='white';
 	ctx.fillStyle="black";
 	fill_Q();
+	// initialize firefox os touch handler	
+	var el = document.getElementById("can"); 	
+	var scaleX  =  el.width / window.innerWidth;
+	var scaleY  =  el.height / window.innerHeight;
+	var scaleToFit = Math.min(scaleX, scaleY);
+	el.style.transformOrigin = "0 0";
+	el.style.transform 	= ("scale(" + scaleToFit + ")");
+	
+	ctx.strokeStyle='white';
+	el.addEventListener("touchstart", handleStart, false);
+	el.addEventListener("touchend", handleStop, false);
 	//"mutex"
 	mut = setInterval(draw, 40);
 }	
+//500 width
+//530 height
+
+// handle touch events
+function handleStart(evt){
+   	evt.preventDefault();
+	var touches = evt.targetTouches;
+	launchx =  touches[0].clientX;	
+	launchy =  touches[0].clientY;	
+	//log("touchstart.");
+	//todo more than up
+}
+
+function handleStop(evt){
+	evt.preventDefault();
+   var touches = evt.changedTouches;
+   launchx = touches[0].clientX - launchx;
+
+  launchy = touches[0].clientY - launchy;
+//	log("touchstop.");
+	touch_pressed = true;
+}
