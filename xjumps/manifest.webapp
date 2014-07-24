@@ -1,0 +1,14 @@
+{
+  "name": "Xjumps",
+  "description": "Xjump javascript clone",
+  "launch_path": "/index.html",
+  "icons": {
+	"60" : "/logo60.png",
+	"128" : "/player128.png"
+  },
+  "developer": {
+    "name": "hferee",
+    "url": "http://http.feree.fr"
+  },
+  "default_locale": "fr"
+}
